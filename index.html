@@ -24,7 +24,7 @@ html.dark{
   --shadow:none;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:72px}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--top-h,72px) + 8px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.55;font-size:16px}
 a{color:inherit}
 /* top bar */
@@ -44,16 +44,37 @@ a{color:inherit}
 .bar>i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
 /* layout */
 .layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:28px;max-width:1240px;margin:0 auto;padding:22px 18px 80px}
-aside#toc{position:sticky;top:64px;align-self:start;max-height:calc(100vh - 80px);overflow:auto;padding-right:6px;font-size:13.5px}
-#toc .lvl{margin-bottom:14px}
-#toc .lvl>a{display:block;font-weight:700;text-decoration:none;margin-bottom:4px}
-#toc .lvl small{color:var(--muted);font-weight:400}
-#toc ol{list-style:none;margin:6px 0 0;padding:0}
+aside#toc{position:sticky;top:calc(var(--top-h,64px) + 8px);align-self:start;max-height:calc(100vh - var(--top-h,64px) - 24px);overflow:auto;padding-right:6px;font-size:13.5px}
+.toc-tools{display:flex;gap:12px;margin:0 2px 10px}
+.toc-mini{font:inherit;font-size:12px;color:var(--muted);background:transparent;border:0;padding:4px 0;min-height:32px;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.toc-mini:hover{color:var(--accent)}
+.grp{margin:0 0 6px}
+.grp-h,.chev-btn{font:inherit;color:inherit;background:transparent;border:0;cursor:pointer}
+.grp-h{display:flex;align-items:center;gap:4px;width:100%;text-align:left;padding:6px 4px;border-radius:8px;font-weight:700;font-size:14px;min-height:34px}
+.grp-h:hover,.chev-btn:hover{background:var(--soft)}
+.grp-h .nt{flex:1;min-width:0}
+.chev{display:inline-grid;place-items:center;width:1.1em;flex:none;color:var(--muted);font-size:11px;line-height:1;transition:transform .18s ease}
+.grp.folded>.grp-h .chev,.lvl.folded>.lvl-h .chev{transform:rotate(-90deg)}
+.lvl{margin:2px 0 10px 8px}
+.lvl-h{display:flex;align-items:flex-start;gap:2px}
+.chev-btn{flex:none;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin-top:-2px;padding:0;border-radius:7px}
+.lvl-h a{flex:1;min-width:0;font-weight:700;text-decoration:none;padding:2px 2px 0}
+.lvl-h small{display:block;color:var(--muted);font-weight:400;line-height:1.3}
+.count{margin-left:auto;flex:none;font-size:11px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;padding-top:3px}
+.grp-h .count{padding-top:0}
+.lvl .bar{margin:3px 0 4px 30px}
+.grp.is-current>.grp-h .nt,.lvl.is-current>.lvl-h a{color:var(--accent)}
+.branch{display:grid;grid-template-rows:1fr;transition:grid-template-rows .22s ease}
+.folded>.branch{grid-template-rows:0fr}
+.branch-in{overflow:hidden;min-height:0}
+#toc.toc-boot .branch,#toc.toc-boot .chev{transition:none}
+#toc ol{list-style:none;margin:2px 0 0 22px;padding:0}
 #toc li a{display:flex;gap:6px;text-decoration:none;color:var(--muted);padding:2px 6px;border-radius:6px}
-#toc li a:hover{background:var(--soft);color:var(--ink)}
+#toc li a:hover,#toc li.here a{background:var(--soft);color:var(--ink)}
 #toc li a b{font-weight:500;min-width:22px;text-align:right;color:var(--muted)}
 #toc li.done a{color:var(--ink)}
 #toc li.done a::after{content:"✓";margin-left:auto;color:var(--c-o)}
+.grp-h:focus-visible,.chev-btn:focus-visible,.toc-mini:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 main{min-width:0}
 .intro{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);margin-bottom:16px}
 .intro p{margin:.2em 0;color:var(--muted);font-size:14px}
@@ -107,7 +128,10 @@ ul.ex li:hover{background:var(--soft)}
 .speak.is-playing{color:var(--accent);border-color:var(--accent);background:var(--soft);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}
 .speak.is-playing .wave{animation:speak-wave .9s ease-in-out infinite}
 @keyframes speak-wave{50%{opacity:.35}}
-@media (prefers-reduced-motion:reduce){.speak.is-playing .wave{animation:none}}
+@media (prefers-reduced-motion:reduce){
+  .speak.is-playing .wave{animation:none}
+  .branch,.chev{transition:none}
+}
 .jp .w{font-weight:500}
 .jp .w.k-p,.jp .w.k-t,.jp .w.k-s,.jp .w.k-o{font-weight:700}
 .jp .w.k-g{background:var(--hl);color:var(--hl-ink);border-radius:4px;padding:0 2px;font-weight:700}
@@ -139,8 +163,8 @@ footer{color:var(--muted);font-size:12.5px;text-align:center;margin-top:40px}
 @media (max-width:900px){
   .layout{grid-template-columns:1fr}
   #menuBtn{display:inline-block}
-  aside#toc{position:fixed;top:54px;left:0;bottom:0;width:290px;max-height:none;background:var(--panel);z-index:40;padding:16px;
-    border-right:1px solid var(--line);transform:translateX(-105%);transition:transform .25s}
+  aside#toc{position:fixed;top:var(--top-h,54px);left:0;bottom:0;width:min(290px,88vw);max-height:none;background:var(--panel);z-index:40;padding:12px 14px 24px;
+    border-right:1px solid var(--line);transform:translateX(-105%);transition:transform .25s;overscroll-behavior:contain}
   body.toc-open aside#toc{transform:none;box-shadow:0 0 40px rgba(0,0,0,.25)}
   .cards{grid-template-columns:1fr}
   .topbar h1{font-size:15px}
@@ -151,7 +175,7 @@ footer{color:var(--muted);font-size:12.5px;text-align:center;margin-top:40px}
 </head>
 <body>
 <div class="topbar">
-  <button class="tbtn" id="menuBtn" aria-label="Contents">☰</button>
+  <button class="tbtn" id="menuBtn" type="button" aria-label="Contents" aria-controls="toc" aria-expanded="false">☰</button>
   <h1>文法 <span>Japanese grammar</span>, step by step</h1>
   <button class="tbtn" data-tg="furi" aria-pressed="true" title="Show/hide furigana">ふりがな</button>
   <button class="tbtn" data-tg="ro" aria-pressed="true" title="Show/hide romaji">Romaji</button>
@@ -165,7 +189,7 @@ footer{color:var(--muted);font-size:12.5px;text-align:center;margin-top:40px}
   <aside id="toc"></aside>
   <main>
     <section class="intro">
-      <p><b>How to use:</b> one card = one rule. Same small word set everywhere — only the grammar changes. Read the formula, then the examples. Tap the speaker to hear the Japanese. Hide furigana / romaji / English (top bar) to test yourself; tap an example to peek. Tick “learned” to track progress. “Slow” plays speech a little slower.</p>
+      <p><b>How to use:</b> one card = one rule. Same small word set everywhere — only the grammar changes. Read the formula, then the examples. Tap the speaker to hear the Japanese. Hide furigana / romaji / English (top bar) to test yourself; tap an example to peek. Tick “learned” to track progress. “Slow” plays speech a little slower. The contents list folds by level; the count is how many rules you’ve marked learned.</p>
       <div class="legend" id="legend"></div>
     </section>
     <details class="vocab" id="vocabPanel"><summary>Vocabulary — the only words used in examples</summary><div class="vgrid" id="vgrid"></div></details>
@@ -675,17 +699,29 @@ function renderCell(txt,isHead){
 const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
 let learned=new Set(store.get("jg.learned",[]));
 
+/* JLPT bands in the contents tree. Level 6 is labelled N4–N3 in the course, so it is its own band. */
+const TOC_GROUPS=[{id:"N5",label:"N5"},{id:"N4",label:"N4"},{id:"N4N3",label:"N4–N3"}];
+function groupFor(name){
+  if(/N4[–-]N3/.test(name)) return "N4N3";
+  if(/N5/.test(name)) return "N5";
+  if(/N4/.test(name)) return "N4";
+  if(/N3/.test(name)) return "N3";
+  return "N5";
+}
 function build(){
   document.getElementById("legend").innerHTML=LEGEND.map(([k,l])=>`<span class="k-${k}"${k==="g"?' style="background:var(--hl);color:var(--hl-ink);border-color:transparent"':""}>${esc(l)}</span>`).join("");
   document.getElementById("vgrid").innerHTML=VOCAB.map(([g,items])=>`<div class="vgroup">${esc(g)}</div>`+items.map(([w,en])=>{
     const p=parse(w,false);return `<div class="vitem"><span class="jp">${p.html}</span>${speakBtn(surface(w))}<span><span class="en">${esc(en)}</span><br><span class="kn">${esc(p.kana)} · <span class="ro" style="font-size:12px">${esc(romaji(p.kana))}</span></span></span></div>`;}).join("")).join("");
-  let n=0,toc="",out="";
+  let n=0,out="";
+  const parts={};
   for(const L of LEVELS){
-    toc+=`<div class="lvl" data-l="${L.id}"><a href="#${L.id}">${esc(L.name)} <small>${esc(L.sub)}</small></a><div class="bar"><i></i></div><ol>`;
+    const gid=groupFor(L.name);
+    const short=esc(L.name.replace(/\s*·\s*.*$/,""));
+    let rules="";
     out+=`<section class="level" id="${L.id}"><div class="level-h"><h2>${esc(L.name)}</h2><span class="sub">${esc(L.sub)}</span><span class="prog"><span class="pt"></span><span class="bar"><i></i></span></span></div><div class="cards">`;
     for(const R of L.rules){
       n++;const id="r"+n;R.id=id;
-      toc+=`<li data-id="${id}"><a href="#${id}"><b>${n}</b><span>${esc(R.t)}</span></a></li>`;
+      rules+=`<li data-id="${id}"><a href="#${id}"><b>${n}</b><span>${esc(R.t)}</span></a></li>`;
       const wide=R.w||(R.tb&&R.tb.h.length>=5);
       let tb="";
       if(R.tb){tb=`<div class="tw"><table class="conj"><thead><tr>${R.tb.h.map(h=>`<th>${renderCell(h,true)}</th>`).join("")}</tr></thead><tbody>${R.tb.r.map(row=>`<tr>${row.map(c=>`<td>${renderCell(c,false)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;}
@@ -693,7 +729,13 @@ function build(){
       out+=`<article class="card${wide?" wide":""}" id="${id}" data-l="${L.id}"><div class="card-h"><span class="num">${n}</span><h3>${esc(R.t)}</h3><label class="learn"><input type="checkbox" data-id="${id}">learned</label></div>`+
         `<div class="formula">${renderFormula(R.f)}</div><p class="expl">${esc(R.e)}</p>${tb}<ul class="ex">${ex}</ul></article>`;
     }
-    toc+=`</ol></div>`;out+=`</div></section>`;
+    parts[gid]=(parts[gid]||"")+`<div class="lvl folded" data-node="${L.id}" data-l="${L.id}"><div class="lvl-h"><button type="button" class="chev-btn" aria-expanded="false" aria-label="Expand ${short}"><span class="chev" aria-hidden="true">▾</span></button><a href="#${L.id}">${short} <small>${esc(L.sub)}</small></a><span class="count" data-count="${L.id}">0/0</span></div><div class="bar"><i></i></div><div class="branch"><div class="branch-in"><ol>${rules}</ol></div></div></div>`;
+    out+=`</div></section>`;
+  }
+  let toc=`<div class="toc-tools"><button type="button" class="toc-mini" id="tocExpand">Expand all</button><button type="button" class="toc-mini" id="tocCollapse">Collapse all</button></div>`;
+  for(const g of TOC_GROUPS){
+    if(!parts[g.id]) continue;
+    toc+=`<div class="grp folded" data-node="${g.id}"><button type="button" class="grp-h" aria-expanded="false"><span class="chev" aria-hidden="true">▾</span><span class="nt">${esc(g.label)}</span><span class="count" data-count="${g.id}">0/0</span></button><div class="branch"><div class="branch-in">${parts[g.id]}</div></div></div>`;
   }
   document.getElementById("toc").innerHTML=toc;
   document.getElementById("levels").innerHTML=out;
@@ -704,11 +746,21 @@ function build(){
 }
 function refresh(){
   let all=0,done=0;
+  const gstat={};
   for(const L of LEVELS){
     const tot=L.rules.length,d=L.rules.filter(r=>learned.has(r.id)).length;all+=tot;done+=d;
     const pct=Math.round(d/tot*100)+"%";
     document.querySelector(`#toc .lvl[data-l="${L.id}"] .bar i`).style.width=pct;
     const sec=document.getElementById(L.id);sec.querySelector(".prog .bar i").style.width=pct;sec.querySelector(".pt").textContent=`${d}/${tot} learned`;
+    const lc=document.querySelector(`#toc [data-count="${L.id}"]`);
+    if(lc){lc.textContent=`${d}/${tot}`;lc.title=`${d} of ${tot} learned`;}
+    const gid=groupFor(L.name);
+    if(!gstat[gid]) gstat[gid]={d:0,tot:0};
+    gstat[gid].d+=d;gstat[gid].tot+=tot;
+  }
+  for(const gid in gstat){
+    const t=gstat[gid],gc=document.querySelector(`#toc [data-count="${gid}"]`);
+    if(gc){gc.textContent=`${t.d}/${t.tot}`;gc.title=`${t.d} of ${t.tot} learned`;}
   }
   document.querySelectorAll("#toc li").forEach(li=>li.classList.toggle("done",learned.has(li.dataset.id)));
   document.querySelectorAll(".card").forEach(c=>c.classList.toggle("learned",learned.has(c.id)));
@@ -732,8 +784,161 @@ function setupControls(){
   const theme=store.get("jg.theme",null)||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
   document.documentElement.classList.toggle("dark",theme==="dark");
   document.getElementById("themeBtn").addEventListener("click",()=>{const d=document.documentElement.classList.toggle("dark");store.set("jg.theme",d?"dark":"light");});
-  document.getElementById("menuBtn").addEventListener("click",()=>document.body.classList.toggle("toc-open"));
-  document.getElementById("toc").addEventListener("click",e=>{if(e.target.closest("a"))document.body.classList.remove("toc-open");});
+  const menuBtn=document.getElementById("menuBtn");
+  const setMenu=open=>{document.body.classList.toggle("toc-open",open);menuBtn.setAttribute("aria-expanded",String(open));menuBtn.setAttribute("aria-label",open?"Close contents":"Contents");menuBtn.textContent=open?"✕":"☰";};
+  menuBtn.addEventListener("click",()=>setMenu(!document.body.classList.contains("toc-open")));
+  initToc(prefs,setMenu);
+  document.getElementById("toc").addEventListener("click",e=>{
+    const a=e.target.closest("a");
+    if(!a||a.closest(".lvl-h")) return;
+    setMenu(false);
+  });
+}
+function docTop(el){const r=el.getBoundingClientRect();return r.top+window.scrollY;}
+function levelFromHash(){
+  const id=(location.hash||"").replace(/^#/,"");
+  if(!id) return null;
+  const el=document.getElementById(id);
+  if(!el) return null;
+  if(el.classList.contains("level")) return el.id;
+  return el.dataset&&el.dataset.l||null;
+}
+function activeLevelId(){
+  const line=window.scrollY+Math.max(96,parseInt(getComputedStyle(document.documentElement).scrollPaddingTop,10)||96);
+  let id=null;
+  document.querySelectorAll("section.level").forEach(s=>{if(docTop(s)<=line) id=s.id;});
+  return id;
+}
+function activeCardId(){
+  const level=activeLevelId();
+  if(!level) return null;
+  const line=window.scrollY+Math.max(110,parseInt(getComputedStyle(document.documentElement).scrollPaddingTop,10)||110);
+  let id=null;
+  document.querySelectorAll("#"+level+" .card").forEach(c=>{if(docTop(c)<=line) id=c.id;});
+  return id;
+}
+function setNodeOpen(el,open){
+  if(!el) return;
+  el.classList.toggle("folded",!open);
+  const btn=el.classList.contains("grp")?el.querySelector(":scope > .grp-h"):el.querySelector(":scope > .lvl-h .chev-btn");
+  if(!btn) return;
+  btn.setAttribute("aria-expanded",String(open));
+  if(btn.classList.contains("chev-btn")){
+    const name=(el.querySelector(":scope > .lvl-h a")?.childNodes[0]?.textContent||"section").trim();
+    btn.setAttribute("aria-label",(open?"Collapse ":"Expand ")+name);
+  }
+}
+function initToc(prefs,setMenu){
+  if(!prefs.tocOpen||typeof prefs.tocOpen!=="object"||Array.isArray(prefs.tocOpen)) prefs.tocOpen={};
+  const toc=document.getElementById("toc");
+  const hasSaved=Object.keys(prefs.tocOpen).length>0;
+  toc.classList.add("toc-boot");
+  toc.querySelectorAll("[data-node]").forEach(el=>setNodeOpen(el,!!(hasSaved&&prefs.tocOpen[el.dataset.node])));
+  let suppress=null;
+  function collect(){
+    const o={};
+    toc.querySelectorAll("[data-node]").forEach(el=>{if(!el.classList.contains("folded")) o[el.dataset.node]=true;});
+    return o;
+  }
+  function persist(){prefs.tocOpen=collect();store.set("jg.prefs",prefs);}
+  function markCurrent(levelId){
+    const lvl=levelId&&toc.querySelector('.lvl[data-l="'+levelId+'"]');
+    const grp=lvl&&lvl.closest(".grp");
+    toc.querySelectorAll(".lvl").forEach(el=>el.classList.toggle("is-current",el===lvl));
+    toc.querySelectorAll(".grp").forEach(el=>el.classList.toggle("is-current",el===grp));
+    const card=activeCardId();
+    toc.querySelectorAll("li").forEach(li=>li.classList.toggle("here",!!card&&li.dataset.id===card));
+    return {lvl,grp};
+  }
+  function openPath(levelId){
+    const {lvl,grp}=markCurrent(levelId);
+    if(grp&&suppress!==grp.dataset.node) setNodeOpen(grp,true);
+    if(lvl&&suppress!==lvl.dataset.node) setNodeOpen(lvl,true);
+  }
+  const start=levelFromHash()||activeLevelId();
+  if(start) openPath(start);
+  persist();
+  requestAnimationFrame(()=>toc.classList.remove("toc-boot"));
+  let last=start;
+  toc.addEventListener("click",e=>{
+    if(e.target.closest(".toc-tools")) return;
+    const grpBtn=e.target.closest(".grp-h");
+    if(grpBtn){
+      const node=grpBtn.closest(".grp");
+      const open=node.classList.contains("folded");
+      setNodeOpen(node,open);
+      suppress=open?null:node.dataset.node;
+      persist();
+      return;
+    }
+    const chev=e.target.closest(".chev-btn");
+    if(chev){
+      e.preventDefault();
+      const node=chev.closest(".lvl");
+      const open=node.classList.contains("folded");
+      setNodeOpen(node,open);
+      suppress=open?null:node.dataset.node;
+      persist();
+      return;
+    }
+    const head=e.target.closest(".lvl-h");
+    if(!head) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const lvl=head.closest(".lvl");
+    const grp=lvl.closest(".grp");
+    const opening=lvl.classList.contains("folded");
+    if(grp) setNodeOpen(grp,true);
+    setNodeOpen(lvl,opening);
+    suppress=opening?null:lvl.dataset.node;
+    last=lvl.dataset.l;
+    persist();
+    if(!opening) return;
+    const id=lvl.dataset.l;
+    if(location.hash!=="#"+id) location.hash="#"+id;
+    else document.getElementById(id).scrollIntoView();
+    if(setMenu) setMenu(false);
+  },true);
+  document.getElementById("tocExpand").addEventListener("click",()=>{
+    toc.querySelectorAll("[data-node]").forEach(el=>setNodeOpen(el,true));
+    suppress=null;markCurrent(activeLevelId());persist();
+  });
+  document.getElementById("tocCollapse").addEventListener("click",()=>{
+    toc.querySelectorAll("[data-node]").forEach(el=>setNodeOpen(el,false));
+    suppress=null;
+    const cur=activeLevelId();
+    if(cur) openPath(cur);
+    else markCurrent(null);
+    persist();
+  });
+  let ticking=false;
+  window.addEventListener("scroll",()=>{
+    if(ticking) return;
+    ticking=true;
+    requestAnimationFrame(()=>{
+      ticking=false;
+      const id=activeLevelId();
+      markCurrent(id);
+      if(id===last) return;
+      const lvl=id&&toc.querySelector('.lvl[data-l="'+id+'"]');
+      const grp=lvl&&lvl.closest(".grp");
+      const held=suppress&&(suppress===id||(grp&&suppress===grp.dataset.node));
+      if(!held) suppress=null;
+      last=id;
+      if(id&&!held){openPath(id);persist();}
+    });
+  },{passive:true});
+  window.addEventListener("hashchange",()=>{
+    const id=levelFromHash()||activeLevelId();
+    if(!id) return;
+    const lvl=toc.querySelector('.lvl[data-l="'+id+'"]');
+    const grp=lvl&&lvl.closest(".grp");
+    if(suppress&&(suppress===id||(grp&&suppress===grp.dataset.node))) {last=id;return;}
+    last=id;suppress=null;openPath(id);persist();
+  });
+  const syncBar=()=>document.documentElement.style.setProperty("--top-h",document.querySelector(".topbar").offsetHeight+"px");
+  syncBar();
+  window.addEventListener("resize",syncBar);
 }
 /* ===== Japanese playback (Web Speech API) =====
    speak() is called synchronously inside the click handler so iOS Safari/Chrome
