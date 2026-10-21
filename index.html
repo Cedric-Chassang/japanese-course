@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Japanese Grammar — Mechanical &amp; Progressive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f7f5; --panel:#ffffff; --ink:#1f2328; --muted:#6b7280; --line:#e5e7eb; --soft:#f1f3f5;
+  --accent:#e8590c; --hl:#ffe8a3; --hl-ink:#1f2328;
+  --c-t:#d9480f; --c-s:#c92a2a; --c-o:#2b8a3e; --c-v:#1864ab; --c-a:#0b7285;
+  --c-p:#862e9c; --c-c:#c2255c; --c-n:#495057; --c-q:#8d5524; --c-g:#1f2328; --c-x:#1f2328;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.04);
+  --font:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+html.dark{
+  --bg:#14161a; --panel:#1c1f24; --ink:#e7e9ec; --muted:#9aa1ab; --line:#2c3138; --soft:#23272e;
+  --accent:#ff922b; --hl:#5c4813; --hl-ink:#fff3c4;
+  --c-t:#ffa94d; --c-s:#ff8787; --c-o:#69db7c; --c-v:#74c0fc; --c-a:#66d9e8;
+  --c-p:#e599f7; --c-c:#faa2c1; --c-n:#ced4da; --c-q:#e0b088; --c-g:#fff3c4; --c-x:#e7e9ec;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.55;font-size:16px}
+a{color:inherit}
+/* top bar */
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:10px 18px;background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.topbar h1{font-size:17px;margin:0 auto 0 0;font-weight:700;letter-spacing:.2px;white-space:nowrap}
+.topbar h1 span{color:var(--accent)}
+.tbtn{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--ink);
+  padding:5px 11px;border-radius:999px;cursor:pointer;user-select:none}
+.tbtn[aria-pressed="false"]{color:var(--muted);text-decoration:line-through;opacity:.75}
+.tbtn:hover{border-color:var(--accent)}
+#menuBtn{display:none}
+.overall{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.bar{height:6px;border-radius:9px;background:var(--soft);overflow:hidden;min-width:60px}
+.bar>i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+/* layout */
+.layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:28px;max-width:1240px;margin:0 auto;padding:22px 18px 80px}
+aside#toc{position:sticky;top:64px;align-self:start;max-height:calc(100vh - 80px);overflow:auto;padding-right:6px;font-size:13.5px}
+#toc .lvl{margin-bottom:14px}
+#toc .lvl>a{display:block;font-weight:700;text-decoration:none;margin-bottom:4px}
+#toc .lvl small{color:var(--muted);font-weight:400}
+#toc ol{list-style:none;margin:6px 0 0;padding:0}
+#toc li a{display:flex;gap:6px;text-decoration:none;color:var(--muted);padding:2px 6px;border-radius:6px}
+#toc li a:hover{background:var(--soft);color:var(--ink)}
+#toc li a b{font-weight:500;min-width:22px;text-align:right;color:var(--muted)}
+#toc li.done a{color:var(--ink)}
+#toc li.done a::after{content:"✓";margin-left:auto;color:var(--c-o)}
+main{min-width:0}
+.intro{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);margin-bottom:16px}
+.intro p{margin:.2em 0;color:var(--muted);font-size:14px}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.legend span{font-size:12.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-weight:600}
+details.vocab{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 18px;box-shadow:var(--shadow);margin-bottom:26px}
+details.vocab summary{cursor:pointer;font-weight:700}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px 14px;margin-top:12px}
+.vgroup{grid-column:1/-1;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px;border-bottom:1px solid var(--line);padding-bottom:2px}
+.vitem{display:flex;align-items:baseline;gap:8px;font-size:14px}
+.vitem .jp{font-size:19px;min-width:62px}
+.vitem .kn{color:var(--muted);font-size:12.5px}
+/* level */
+.level{margin:34px 0 10px}
+.level-h{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:6px;margin-bottom:16px}
+.level-h h2{margin:0;font-size:22px}
+.level-h .sub{color:var(--muted);font-size:14px}
+.level-h .prog{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.level-h .bar{width:120px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px 12px;box-shadow:var(--shadow);min-width:0}
+.card.wide{grid-column:1/-1}
+.card.learned{border-color:color-mix(in srgb,var(--c-o) 45%,var(--line))}
+.card.learned .num{background:var(--c-o)}
+.card-h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.num{flex:none;display:inline-grid;place-items:center;min-width:30px;height:30px;padding:0 6px;border-radius:9px;background:var(--ink);color:var(--panel);font-weight:700;font-size:13px}
+.card-h h3{margin:0;font-size:16.5px;font-weight:700;line-height:1.3}
+.learn{margin-left:auto;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap}
+.learn input{accent-color:var(--c-o);width:16px;height:16px;cursor:pointer}
+.formula{display:flex;flex-wrap:wrap;align-items:center;gap:5px;padding:10px;background:var(--soft);border-radius:10px;font-size:17px;margin-bottom:8px}
+.chip{display:inline-flex;align-items:center;padding:2px 9px;border-radius:7px;border:1.5px solid currentColor;font-weight:600;background:var(--panel)}
+.chip.k-g{background:var(--hl);color:var(--hl-ink);border-color:transparent}
+.chip.k-x{border-color:var(--line)}
+.slot{font-family:system-ui,sans-serif;font-size:13.5px;font-weight:600;font-style:italic;opacity:.95}
+.chip .slot{padding:0 1px}
+.sep{color:var(--muted);font-weight:700;padding:0 2px}
+.expl{margin:4px 0 10px;font-size:14px;color:var(--muted)}
+.k-t{color:var(--c-t)}.k-s{color:var(--c-s)}.k-o{color:var(--c-o)}.k-v{color:var(--c-v)}.k-a{color:var(--c-a)}
+.k-p{color:var(--c-p)}.k-c{color:var(--c-c)}.k-n{color:var(--c-n)}.k-q{color:var(--c-q)}.k-x{color:var(--c-x)}
+.k-g{color:var(--c-g)}
+ul.ex{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+ul.ex li{padding:6px 10px;border-left:3px solid var(--line);border-radius:4px;cursor:pointer}
+ul.ex li:hover{background:var(--soft)}
+.jp{font-size:20px;line-height:2.05}
+.jp .w{font-weight:500}
+.jp .w.k-p,.jp .w.k-t,.jp .w.k-s,.jp .w.k-o{font-weight:700}
+.jp .w.k-g{background:var(--hl);color:var(--hl-ink);border-radius:4px;padding:0 2px;font-weight:700}
+.jp .w.k-g rt{color:var(--hl-ink)}
+rt{font-size:.5em;color:var(--muted);font-weight:400;user-select:none}
+.ro{font-size:13px;color:var(--muted);font-style:italic;font-family:system-ui,sans-serif}
+.en{font-size:14px}
+.peek{font-size:11.5px;color:var(--muted);margin:6px 0 0}
+/* hiding for self-test */
+body.no-furi rt{visibility:hidden}
+body.no-ro .ro, body.no-ro .cr{filter:blur(5px);opacity:.5}
+body.no-en .en{filter:blur(5px);opacity:.5}
+body.no-furi .reveal rt{visibility:visible}
+body .reveal .ro, body .reveal .en, body .reveal .cr{filter:none!important;opacity:1!important}
+body.hide-learned .card.learned{display:none}
+/* tables */
+.tw{overflow-x:auto;margin:6px 0 10px;border:1px solid var(--line);border-radius:10px}
+table.conj{border-collapse:collapse;width:100%;font-size:15.5px}
+table.conj th{background:var(--soft);font-size:12px;font-weight:700;text-align:left;padding:6px 8px;color:var(--muted);white-space:nowrap}
+table.conj td{padding:4px 8px;border-top:1px solid var(--line);vertical-align:top;line-height:1.9}
+table.conj td:first-child{font-weight:600}
+table.conj .cr{display:block;font-size:11px;color:var(--muted);font-style:italic;line-height:1.2;font-family:system-ui,sans-serif}
+table.conj tr:hover td{background:color-mix(in srgb,var(--soft) 60%,transparent)}
+.hl{background:var(--hl);color:var(--hl-ink);border-radius:3px;padding:0 1px}
+.hl rt{color:var(--hl-ink)}
+footer{color:var(--muted);font-size:12.5px;text-align:center;margin-top:40px}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  #menuBtn{display:inline-block}
+  aside#toc{position:fixed;top:54px;left:0;bottom:0;width:290px;max-height:none;background:var(--panel);z-index:40;padding:16px;
+    border-right:1px solid var(--line);transform:translateX(-105%);transition:transform .25s}
+  body.toc-open aside#toc{transform:none;box-shadow:0 0 40px rgba(0,0,0,.25)}
+  .cards{grid-template-columns:1fr}
+  .topbar h1{font-size:15px}
+  .overall .bar{display:none}
+}
+@media (max-width:480px){ .jp{font-size:18px} .formula{font-size:15px} .card{padding:12px} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button class="tbtn" id="menuBtn" aria-label="Contents">☰</button>
+  <h1>文法 <span>Japanese grammar</span>, step by step</h1>
+  <button class="tbtn" data-tg="furi" aria-pressed="true" title="Show/hide furigana">ふりがな</button>
+  <button class="tbtn" data-tg="ro" aria-pressed="true" title="Show/hide romaji">Romaji</button>
+  <button class="tbtn" data-tg="en" aria-pressed="true" title="Show/hide English">English</button>
+  <button class="tbtn" id="hideLearned" aria-pressed="false" title="Hide cards marked learned">Hide learned</button>
+  <button class="tbtn" id="themeBtn" title="Dark / light">◐</button>
+  <div class="overall"><span id="overallTxt">0/0</span><div class="bar"><i id="overallBar"></i></div></div>
+</div>
+<div class="layout">
+  <aside id="toc"></aside>
+  <main>
+    <section class="intro">
+      <p><b>How to use:</b> one card = one rule. Same small word set everywhere — only the grammar changes. Read the formula, then the examples. Hide furigana / romaji / English (top bar) to test yourself; tap an example to peek. Tick “learned” to track progress.</p>
+      <div class="legend" id="legend"></div>
+    </section>
+    <details class="vocab" id="vocabPanel"><summary>Vocabulary — the only words used in examples</summary><div class="vgrid" id="vgrid"></div></details>
+    <div id="levels"></div>
+    <footer>Romaji uses simple “wāpuro” spelling (gakkou, kyou, ou = long o). Progress is saved in this browser (localStorage).</footer>
+  </main>
+</div>
+<script>
+"use strict";
+/* ===== Token markup =====
+   Example/formula = tokens separated by spaces. Token = "k:text" where k is a colour class:
+   t topic · s subject · o object · v verb · a adjective · p particle · c copula · n noun · q question/demonstrative · g grammar point (focus) · x other
+   {漢字|かな} = furigana · [Label] = empty slot · * toggles highlight in tables · a leading "+" glues the token to the previous one (no romaji space). */
+const LEGEND=[["t","Topic (+は)"],["s","Subject (+が)"],["o","Object (+を)"],["v","Verb"],["a","Adjective"],["n","Noun"],["p","Particle"],["c","Copula です/だ"],["q","Question / これ-それ words"],["g","★ New grammar"]];
+
+const VOCAB=[
+ ["Nouns",[["{私|わたし}","I, me"],["{友達|ともだち}","friend"],["{先生|せんせい}","teacher"],["{人|ひと}","person"],["{猫|ねこ}","cat"],["{犬|いぬ}","dog"],["{本|ほん}","book"],["{水|みず}","water"],["{学校|がっこう}","school"],["{家|いえ}","house, home"],["{駅|えき}","station"],["{日本|にほん}","Japan"],["{日本語|にほんご}","Japanese (language)"],["{今日|きょう}","today"],["{明日|あした}","tomorrow"],["{昨日|きのう}","yesterday"],["{雨|あめ}","rain"]]],
+ ["Verbs",[["{食|た}べる","eat (ru)"],["{見|み}る","see, watch (ru)"],["{起|お}きる","get up (ru)"],["{飲|の}む","drink (u)"],["{読|よ}む","read (u)"],["{行|い}く","go (u)"],["{書|か}く","write (u)"],["{話|はな}す","speak (u)"],["{買|か}う","buy (u)"],["{待|ま}つ","wait (u)"],["{帰|かえ}る","go home (u!)"],["{分|わ}かる","understand (u)"],["する","do (irregular)"],["{来|く}る","come (irregular)"]]],
+ ["Adjectives",[["{高|たか}い","expensive, tall (い)"],["{安|やす}い","cheap (い)"],["{大|おお}きい","big (い)"],["{小|ちい}さい","small (い)"],["いい","good (い, irregular)"],["{静|しず}か","quiet (な)"],["きれい","pretty, clean (な)"],["{元気|げんき}","healthy, lively (な)"],["{好|す}き","liked (な)"]]],
+ ["Grammar words (appear as part of patterns)",[["ある","exist (things)"],["いる","exist (living)"],["あげる","give"],["くれる","give (to me)"],["もらう","receive"],["{言|い}う","say"],["{思|おも}う","think"],["なる","become"],["できる","can do"],["{何|なに}","what"],["{誰|だれ}","who"],["どこ","where"],["いつ","when"],["どちら","which (of two)"],["{前|まえ}","before"],["{後|あと}","after"],["{予定|よてい}","plan"]]],
+ ["Only in conjugation tables (to show every verb ending)",[["{遊|あそ}ぶ","play (-ぶ)"],["{泳|およ}ぐ","swim (-ぐ)"],["{死|し}ぬ","die (-ぬ)"]]]
+];
+
+const LEVELS=[
+{id:"L1",name:"Level 1 · N5",sub:"Nouns & the copula",rules:[
+{t:"X は Y です — X is Y",f:"t:[Noun] t:は n:[Noun] c:です",e:"は (read “wa”) marks the topic; です closes a polite statement. No a/the, no plural.",x:[
+ ["t:{私|わたし} t:は n:{先生|せんせい} c:です。","I am a teacher."],
+ ["t:{友達|ともだち} t:は n:{先生|せんせい} c:です。","My friend is a teacher."],
+ ["t:{今日|きょう} t:は n:{雨|あめ} c:です。","It's rainy today. (lit. today is rain)"]]},
+{t:"Negative: じゃありません — is not",f:"t:[Noun] t:は n:[Noun] g:じゃありません",e:"Polite negative of です. Same meaning: じゃないです (softer), ではありません (formal).",x:[
+ ["t:{私|わたし} t:は n:{先生|せんせい} g:じゃありません。","I am not a teacher."],
+ ["t:{今日|きょう} t:は n:{雨|あめ} g:じゃない c:です。","It isn't rainy today."]]},
+{t:"Past: でした / じゃありませんでした",f:"t:[Noun] t:は n:[Noun] g:でした",e:"Past of です and of its negative.",tb:{h:["","Present","Past"],r:[["Affirmative","*です","*でした"],["Negative","*じゃありません","*じゃありませんでした"]]},x:[
+ ["t:{昨日|きのう} t:は n:{雨|あめ} g:でした。","It was rainy yesterday."],
+ ["t:{昨日|きのう} t:は n:{雨|あめ} g:じゃありませんでした。","It wasn't rainy yesterday."]]},
+{t:"Question: 〜か",f:"t:[Noun] t:は n:[Noun] c:です g:か",e:"Add か at the end = question. Answer はい (yes) / いいえ (no).",x:[
+ ["t:{友達|ともだち} t:は n:{先生|せんせい} c:です g:か。","Is your friend a teacher?"],
+ ["x:はい、 n:{先生|せんせい} c:です。","Yes, (he/she) is a teacher."],
+ ["x:いいえ、 n:{先生|せんせい} c:じゃありません。","No, (he/she) is not a teacher."]]},
+{t:"の — A's B / B of A",f:"n:[A] g:の n:[B]",e:"A の B: A describes or owns B. Order is the reverse of English “of”.",x:[
+ ["n:{私|わたし} g:の n:{本|ほん}","my book"],
+ ["n:{先生|せんせい} g:の n:{猫|ねこ}","the teacher's cat"],
+ ["t:{私|わたし} t:は n:{日本語|にほんご} g:の n:{先生|せんせい} c:です。","I am a Japanese(-language) teacher."]]},
+{t:"も — also, too",f:"t:[Noun] g:も n:[Noun] c:です",e:"も replaces は (or が / を) to mean “also”.",x:[
+ ["t:{私|わたし} t:は n:{先生|せんせい} c:です。 t:{友達|ともだち} g:も n:{先生|せんせい} c:です。","I am a teacher. My friend is also a teacher."],
+ ["t:{明日|あした} g:も n:{雨|あめ} c:です。","Tomorrow will be rainy too."]]},
+{t:"これ・それ・あれ・どれ — this / that / which",f:"q:[これ/それ/あれ] t:は n:[Noun] c:です",e:"Stand-alone pronouns: near me / near you / far from both / which?",tb:{h:["Near me","Near you","Over there","Question"],r:[["*これ","*それ","*あれ","*どれ"],["this one","that one","that one (far)","which one?"]]},x:[
+ ["q:これ t:は n:{本|ほん} c:です。","This is a book."],
+ ["q:それ t:は n:{猫|ねこ} c:です p:か。","Is that a cat?"],
+ ["n:{私|わたし} p:の t:{本|ほん} t:は q:どれ c:です p:か。","Which one is my book?"]]},
+{t:"この・その・あの・どの + Noun",f:"q:[この/その/あの] n:[Noun]",e:"Same as これ/それ/あれ/どれ but must be followed by a noun.",x:[
+ ["q:あの n:{人|ひと} t:は n:{先生|せんせい} c:です。","That person (over there) is a teacher."],
+ ["q:その t:{本|ほん} t:は n:{日本語|にほんご} p:の n:{本|ほん} c:です。","That book is a Japanese book."],
+ ["q:どの n:{猫|ねこ} c:です p:か。","Which cat is it?"]]},
+{t:"ここ・そこ・あそこ・どこ — places",f:"q:[ここ/そこ/あそこ] t:は n:[Place] c:です",e:"here / there (near you) / over there / where?",x:[
+ ["q:ここ t:は n:{学校|がっこう} c:です。","This (place) is the school."],
+ ["t:{駅|えき} t:は q:どこ c:です p:か。","Where is the station?"],
+ ["q:あそこ t:は n:{私|わたし} p:の n:{家|いえ} c:です。","Over there is my house."]]},
+{t:"Question words: 何・誰・どこ・いつ",f:"t:[Topic] t:は q:[Question word] c:です p:か",e:"Put the question word where the answer will go; keep か at the end.",tb:{h:["{何|なに}/{何|なん}","{誰|だれ}","どこ","いつ"],r:[["what","who","where","when"]]},x:[
+ ["q:それ t:は q:{何|なん} c:です p:か。","What is that?"],
+ ["q:あの t:{人|ひと} t:は q:{誰|だれ} c:です p:か。","Who is that person?"],
+ ["n:{先生|せんせい} p:の t:{家|いえ} t:は q:どこ c:です p:か。","Where is the teacher's house?"]]}
+]},
+{id:"L2",name:"Level 2 · N5",sub:"Verbs & core particles",rules:[
+{t:"Three verb groups",f:"v:[…iる/…eる] sep:= x:ru-verb sep:· v:[…u] sep:= x:u-verb sep:· v:する/{来|く}る sep:= x:irregular",e:"All verbs end in -u. The group decides how it conjugates. 帰る looks like a ru-verb but is an u-verb.",tb:{h:["Group","Rule","Examples"],r:[["ru-verb (ichidan)","ends in -iru / -eru","{食|た}べる・{見|み}る・{起|お}きる"],["u-verb (godan)","any -u ending","{飲|の}む・{行|い}く・{話|はな}す・{帰|かえ}る"],["irregular","only two","する・{来|く}る"]]},x:[
+ ["v:{食|た}べる","to eat (ru-verb)"],["v:{飲|の}む","to drink (u-verb)"],["v:する","to do (irregular)"]]},
+{t:"〜ます — polite present / future",f:"v:[Verb stem] +g:ます",e:"Stem: ru-verb drop る · u-verb -u → -i · する → し · 来る → 来(き).",tb:{h:["Dictionary","ます form"],r:[["{食|た}べる","{食|た}べ*ます"],["{見|み}る","{見|み}*ます"],["{飲|の}む","{飲|の}*みます"],["{行|い}く","{行|い}*きます"],["{話|はな}す","{話|はな}*します"],["{買|か}う","{買|か}*います"],["{待|ま}つ","{待|ま}*ちます"],["{帰|かえ}る","{帰|かえ}*ります"],["する","*します"],["{来|く}る","{来|き}*ます"]]},x:[
+ ["t:{私|わたし} t:は v:{食|た}べ +g:ます。","I eat. / I will eat."],
+ ["t:{先生|せんせい} t:は v:{来|き} +g:ます。","The teacher will come."],
+ ["n:{明日|あした}、 v:{帰|かえ}り +g:ます。","I'll go home tomorrow."]]},
+{t:"ます → ません / ました / ませんでした",f:"v:[stem] +g:ます sep:/ g:ません sep:/ g:ました sep:/ g:ませんでした",e:"Polite: do / don't / did / didn't.",tb:{h:["Verb","Do","Don't","Did","Didn't"],r:[["{食|た}べる","{食|た}べ*ます","{食|た}べ*ません","{食|た}べ*ました","{食|た}べ*ませんでした"],["{飲|の}む","{飲|の}*みます","{飲|の}*みません","{飲|の}*みました","{飲|の}*みませんでした"],["する","*します","*しません","*しました","*しませんでした"],["{来|く}る","{来|き}*ます","{来|き}*ません","{来|き}*ました","{来|き}*ませんでした"]]},x:[
+ ["t:{私|わたし} t:は v:{食|た}べ +g:ました。","I ate."],
+ ["t:{先生|せんせい} t:は v:{帰|かえ}り +g:ません。","The teacher isn't going home."],
+ ["n:{昨日|きのう}、 t:{友達|ともだち} t:は v:{来|き} +g:ませんでした。","Yesterday my friend didn't come."]]},
+{t:"を — direct object",f:"o:[Object] o:を v:[Verb]",e:"を (read “o”) marks what the verb acts on. The verb always comes last.",x:[
+ ["t:{私|わたし} t:は o:{水|みず} o:を v:{飲|の}みます。","I drink water."],
+ ["t:{友達|ともだち} t:は o:{本|ほん} o:を v:{読|よ}みました。","My friend read a book."],
+ ["o:{日本語|にほんご} o:を v:{話|はな}します p:か。","Do you speak Japanese?"]]},
+{t:"に — destination (to)",f:"n:[Place] g:に v:{行|い}く/{来|く}る/{帰|かえ}る",e:"に = to, with movement verbs.",x:[
+ ["t:{私|わたし} t:は n:{学校|がっこう} g:に v:{行|い}きます。","I go to school."],
+ ["t:{友達|ともだち} t:は n:{家|いえ} g:に v:{帰|かえ}りました。","My friend went home."],
+ ["t:{先生|せんせい} t:は n:{日本|にほん} g:に v:{来|き}ました。","The teacher came to Japan."]]},
+{t:"へ — toward",f:"n:[Place] g:へ v:[Movement verb]",e:"へ (read “e”) = toward; for direction it is interchangeable with に.",x:[
+ ["n:{日本|にほん} g:へ v:{行|い}きます。","I'm going to Japan."],
+ ["n:{駅|えき} g:へ v:{行|い}きました。","I went to the station."]]},
+{t:"で — place of action / means",f:"n:[Place / Means] g:で v:[Verb]",e:"で = at (where the action happens) or by / in (tool, language).",x:[
+ ["n:{家|いえ} g:で o:{本|ほん} o:を v:{読|よ}みます。","I read books at home."],
+ ["n:{学校|がっこう} g:で o:{日本語|にほんご} o:を v:{話|はな}します。","I speak Japanese at school."],
+ ["n:{日本語|にほんご} g:で v:{書|か}きます。","I write in Japanese."]]},
+{t:"と — and / with",f:"n:[A] g:と n:[B] sep:· n:[Person] g:と v:[Verb]",e:"Between nouns: “and” (full list). After a person: “with”.",x:[
+ ["o:{水|みず} g:と o:{本|ほん} o:を v:{買|か}いました。","I bought water and a book."],
+ ["n:{友達|ともだち} g:と n:{学校|がっこう} p:に v:{行|い}きます。","I go to school with my friend."]]},
+{t:"ある / いる — there is",f:"n:[Place] p:に s:[Thing] s:が g:あります sep:· s:[Living] s:が g:います",e:"あります for things & plants, います for people & animals. が marks the subject.",x:[
+ ["n:{家|いえ} p:に s:{猫|ねこ} s:が g:います。","There is a cat at home."],
+ ["n:{学校|がっこう} p:に s:{本|ほん} s:が g:あります。","There are books at school."],
+ ["n:{駅|えき} p:に s:{先生|せんせい} s:が g:いました。","The teacher was at the station."]]},
+{t:"X は [Place] に ある / いる — where something is",f:"t:[Thing] t:は n:[Place] g:に v:あります/います",e:"Known thing as topic, then its location.",x:[
+ ["t:{猫|ねこ} t:は n:{家|いえ} g:に v:います。","The cat is at home."],
+ ["n:{私|わたし} p:の t:{本|ほん} t:は q:どこ g:に v:あります p:か。","Where is my book?"],
+ ["t:{先生|せんせい} t:は n:{学校|がっこう} g:に v:いません。","The teacher isn't at school."]]},
+{t:"Numbers & counters",f:"o:[Noun] o:を g:[Number+counter] v:[Verb]",e:"The counter goes after noun + particle, before the verb. Learn the irregular readings in colour.",w:1,tb:{h:["#","Number","〜つ (things)","〜人 (people)","〜時 (o'clock)"],r:[
+ ["1","{一|いち}","*{一|ひと}つ","*{一人|ひとり}","{一時|いちじ}"],["2","{二|に}","*{二|ふた}つ","*{二人|ふたり}","{二時|にじ}"],["3","{三|さん}","{三|みっ}つ","{三人|さんにん}","{三時|さんじ}"],["4","{四|よん}","{四|よっ}つ","*{四人|よにん}","*{四時|よじ}"],["5","{五|ご}","{五|いつ}つ","{五人|ごにん}","{五時|ごじ}"],["6","{六|ろく}","{六|むっ}つ","{六人|ろくにん}","{六時|ろくじ}"],["7","{七|なな}","{七|なな}つ","{七人|ななにん}","*{七時|しちじ}"],["8","{八|はち}","{八|やっ}つ","{八人|はちにん}","{八時|はちじ}"],["9","{九|きゅう}","{九|ここの}つ","{九人|きゅうにん}","*{九時|くじ}"],["10","{十|じゅう}","*{十|とお}","{十人|じゅうにん}","{十時|じゅうじ}"]]},x:[
+ ["n:{学校|がっこう} p:に s:{先生|せんせい} s:が g:{三人|さんにん} v:います。","There are three teachers at the school."],
+ ["o:{水|みず} o:を g:{二|ふた}つ v:{買|か}いました。","I bought two (bottles of) water."],
+ ["g:{七時|しちじ} p:に v:{起|お}きます。","I get up at 7. (clock times take に; 今日・明日 don't)"]]},
+{t:"から / まで — from / until",f:"n:[A] g:から n:[B] g:まで",e:"から = from, まで = until / as far as. Works for time and place.",x:[
+ ["t:{学校|がっこう} t:は x:{九時|くじ} g:から x:{五時|ごじ} g:まで c:です。","School is from 9 to 5."],
+ ["n:{駅|えき} g:から n:{家|いえ} g:まで n:{友達|ともだち} p:と v:{帰|かえ}りました。","I went home from the station with my friend."]]},
+{t:"〜ましょう / 〜ませんか — let's / won't you?",f:"v:[stem] +g:ましょう sep:· v:[stem] +g:ません g:か",e:"ましょう = let's… · ませんか = shall we / won't you…? (polite invitation)",x:[
+ ["n:{駅|えき} p:で v:{待|ま}ち +g:ましょう。","Let's wait at the station."],
+ ["o:{水|みず} o:を v:{飲|の}み +g:ません g:か。","Won't you have some water?"],
+ ["n:{明日|あした}、 n:{学校|がっこう} p:に v:{行|い}き +g:ましょう g:か。","Shall we go to school tomorrow?"]]},
+{t:"stem + に行く — go (in order) to do",f:"o:[Object] o:を v:[stem] g:に v:{行|い}く/{来|く}る/{帰|かえ}る",e:"Purpose of the movement = verb stem + に.",x:[
+ ["o:{本|ほん} o:を v:{買|か}い g:に v:{行|い}きます。","I'm going (out) to buy a book."],
+ ["t:{友達|ともだち} t:は o:{水|みず} o:を v:{飲|の}み g:に v:{来|き}ました。","My friend came to drink some water."]]}
+]},
+{id:"L3",name:"Level 3 · N5",sub:"Adjectives & comparison",rules:[
+{t:"い-adjective + です",f:"t:[Topic] t:は a:[〜い] c:です",e:"い-adjectives end in い and go straight before です.",x:[
+ ["q:この t:{本|ほん} t:は a:{高|たか}い c:です。","This book is expensive."],
+ ["t:{猫|ねこ} t:は a:{小|ちい}さい c:です。","Cats are small."],
+ ["t:{学校|がっこう} t:は a:{大|おお}きい c:です。","The school is big."]]},
+{t:"な-adjective + です",f:"t:[Topic] t:は a:[な-adj] c:です",e:"Behave like nouns before です. Trap: きれい is a な-adjective.",x:[
+ ["t:{学校|がっこう} t:は a:{静|しず}か c:です。","The school is quiet."],
+ ["t:{猫|ねこ} t:は a:きれい c:です。","The cat is pretty."],
+ ["t:{先生|せんせい} t:は a:{元気|げんき} c:です。","The teacher is well."]]},
+{t:"Adjective + Noun",f:"a:[〜い] n:[Noun] sep:· a:[な-adj] g:な n:[Noun]",e:"Before a noun: い-adj unchanged; な-adj adds な.",x:[
+ ["a:{高|たか}い n:{本|ほん}","an expensive book"],
+ ["a:{静|しず}か g:な n:{家|いえ}","a quiet house"],
+ ["t:{先生|せんせい} t:は a:きれい g:な n:{人|ひと} c:です。","The teacher is a beautiful person."]]},
+{t:"い-adjective conjugation",f:"a:[stem] +g:くない sep:/ +g:かった sep:/ +g:くなかった",e:"Drop い, add the ending; add です to be polite. いい switches to よ-.",w:1,tb:{h:["","Present","Negative","Past","Past negative"],r:[["Plain","{高|たか}い","{高|たか}*くない","{高|たか}*かった","{高|たか}*くなかった"],["Polite","{高|たか}いです","{高|たか}*くないです","{高|たか}*かったです","{高|たか}*くなかったです"],["いい plain","いい","*よくない","*よかった","*よくなかった"],["いい polite","いいです","*よくないです","*よかったです","*よくなかったです"]]},x:[
+ ["t:{本|ほん} t:は a:{高|たか} +g:くなかった c:です。","The book wasn't expensive."],
+ ["t:{日本|にほん} t:は a:よ +g:かった c:です。","Japan was great."]]},
+{t:"な-adjective conjugation",f:"a:[な-adj] g:じゃない sep:/ g:だった sep:/ g:じゃなかった",e:"Exactly the noun endings (です / だ family).",w:1,tb:{h:["","Present","Negative","Past","Past negative"],r:[["Plain","{静|しず}か*だ","{静|しず}か*じゃない","{静|しず}か*だった","{静|しず}か*じゃなかった"],["Polite","{静|しず}か*です","{静|しず}か*じゃありません","{静|しず}か*でした","{静|しず}か*じゃありませんでした"]]},x:[
+ ["t:{家|いえ} t:は a:{静|しず}か g:じゃありません。","The house isn't quiet."],
+ ["t:{猫|ねこ} t:は a:{元気|げんき} g:でした。","The cat was lively."],
+ ["t:{駅|えき} t:は a:きれい g:じゃなかった。","The station wasn't clean. (plain)"]]},
+{t:"好き — to like",f:"t:[Person] t:は s:[Thing] s:が g:{好|す}き c:です",e:"好き is a な-adjective; the liked thing takes が.",x:[
+ ["t:{私|わたし} t:は s:{猫|ねこ} s:が g:{好|す}き c:です。","I like cats."],
+ ["t:{先生|せんせい} t:は s:{日本語|にほんご} s:が g:{好|す}き c:です p:か。","Does the teacher like Japanese?"],
+ ["s:{犬|いぬ} s:が g:{好|す}き c:じゃありません。","I don't like dogs."]]},
+{t:"ほしい — to want (a thing)",f:"t:[Person] t:は s:[Thing] s:が g:ほしい c:です",e:"ほしい is an い-adjective (ほしくない, ほしかった). Used for my / your wants.",x:[
+ ["t:{私|わたし} t:は s:{猫|ねこ} s:が g:ほしい c:です。","I want a cat."],
+ ["s:{水|みず} s:が g:ほしい c:です。","I want water."],
+ ["t:{本|ほん} t:は g:ほしくない c:です。","I don't want a book."]]},
+{t:"は vs が",f:"s:[Question word] s:が v:[Verb] p:か sep:→ s:[Answer] s:が v:[Verb]",e:"は = topic (“as for…”); が = the specific subject. Question words and their answers take が, never は.",x:[
+ ["s:{誰|だれ} s:が v:{来|き}ます p:か。","Who is coming?"],
+ ["s:{友達|ともだち} s:が v:{来|き}ます。","My friend is coming."],
+ ["s:{何|なに} s:が a:{好|す}き c:です p:か。","What do you like?"]]},
+{t:"より — more than",f:"t:[A] t:は n:[B] g:より a:[Adjective] c:です",e:"A は B より Adj = A is more Adj than B.",x:[
+ ["t:{犬|いぬ} t:は n:{猫|ねこ} g:より a:{大|おお}きい c:です。","Dogs are bigger than cats."],
+ ["t:{本|ほん} t:は n:{水|みず} g:より a:{高|たか}い c:です。","Books are more expensive than water."]]},
+{t:"のほうが — A is more (of two)",f:"s:[A] g:の g:ほう s:が a:[Adjective] c:です",e:"Answer to “A と B と どちらが…?” (which of the two…?).",x:[
+ ["n:{猫|ねこ} p:と n:{犬|いぬ} p:と q:どちら s:が a:{好|す}き c:です p:か。","Which do you like more, cats or dogs?"],
+ ["s:{猫|ねこ} g:の g:ほう s:が a:{好|す}き c:です。","I like cats more."],
+ ["s:{犬|いぬ} g:の g:ほう s:が n:{猫|ねこ} p:より a:{大|おお}きい c:です。","Dogs are bigger than cats."]]},
+{t:"一番 — the most",f:"n:[Group] p:で s:[Thing] s:が g:{一番|いちばん} a:[Adjective] c:です",e:"一番 (number one) + adjective = superlative.",x:[
+ ["q:この t:{本|ほん} s:が g:{一番|いちばん} a:{高|たか}い c:です。","This book is the most expensive."],
+ ["n:{日本|にほん} p:で s:{何|なに} s:が g:{一番|いちばん} a:{好|す}き c:です p:か。","What do you like most in Japan?"]]}
+]},
+{id:"L4",name:"Level 4 · N5",sub:"Plain forms & the て-form",rules:[
+{t:"Verb conjugation map (all endings)",f:"v:[Dictionary] sep:→ g:ます sep:· g:ない sep:· g:た sep:· g:て",e:"One table for every ending; the next cards use each column. Yellow = what changes.",w:1,tb:{h:["Ending","Dictionary","ます (polite)","ない (not)","た (did)","て (and…)"],r:[
+ ["ru-verb","{食|た}べる","{食|た}べ*ます","{食|た}べ*ない","{食|た}べ*た","{食|た}べ*て"],
+ ["ru-verb","{見|み}る","{見|み}*ます","{見|み}*ない","{見|み}*た","{見|み}*て"],
+ ["-う","{買|か}う","{買|か}*います","{買|か}*わない","{買|か}*った","{買|か}*って"],
+ ["-つ","{待|ま}つ","{待|ま}*ちます","{待|ま}*たない","{待|ま}*った","{待|ま}*って"],
+ ["-る (u)","{帰|かえ}る","{帰|かえ}*ります","{帰|かえ}*らない","{帰|かえ}*った","{帰|かえ}*って"],
+ ["-む","{飲|の}む","{飲|の}*みます","{飲|の}*まない","{飲|の}*んだ","{飲|の}*んで"],
+ ["-ぶ","{遊|あそ}ぶ","{遊|あそ}*びます","{遊|あそ}*ばない","{遊|あそ}*んだ","{遊|あそ}*んで"],
+ ["-ぬ","{死|し}ぬ","{死|し}*にます","{死|し}*なない","{死|し}*んだ","{死|し}*んで"],
+ ["-く","{書|か}く","{書|か}*きます","{書|か}*かない","{書|か}*いた","{書|か}*いて"],
+ ["-ぐ","{泳|およ}ぐ","{泳|およ}*ぎます","{泳|およ}*がない","{泳|およ}*いだ","{泳|およ}*いで"],
+ ["-す","{話|はな}す","{話|はな}*します","{話|はな}*さない","{話|はな}*した","{話|はな}*して"],
+ ["exception","{行|い}く","{行|い}*きます","{行|い}*かない","{行|い}*った","{行|い}*って"],
+ ["exception","ある","*あります","*ない","*あった","*あって"],
+ ["irregular","する","*します","*しない","*した","*して"],
+ ["irregular","{来|く}る","{来|き}*ます","{来|こ}*ない","{来|き}*た","{来|き}*て"]]},x:[
+ ["v:{書|か}く sep:→ v:{書|か} +g:きます sep:→ v:{書|か} +g:かない sep:→ v:{書|か} +g:いた sep:→ v:{書|か} +g:いて","write → writes → doesn't write → wrote → write and…"]]},
+{t:"ない-form — plain “don't”",f:"v:[Verb] sep:→ v:[a-stem] +g:ない",e:"ru: る→ない · u: -u→-a + ない (う→わ) · する→しない · 来る→こない · ある→ない.",x:[
+ ["t:{私|わたし} t:は o:{水|みず} o:を v:{飲|の}ま +g:ない。","I don't drink water."],
+ ["t:{友達|ともだち} t:は v:{来|こ} +g:ない。","My friend isn't coming."],
+ ["n:{明日|あした} t:は n:{学校|がっこう} p:に v:{行|い}か +g:ない。","I'm not going to school tomorrow."]]},
+{t:"た-form & なかった — plain past",f:"v:[て-form: て→た / で→だ] sep:· v:[ない-form] sep:→ g:なかった",e:"た-form = て-form with た/だ. Past negative: ない → なかった.",x:[
+ ["n:{昨日|きのう}、 o:{本|ほん} o:を v:{読|よ} +g:んだ。","I read a book yesterday."],
+ ["o:{水|みず} o:を v:{買|か} +g:った。","I bought water."],
+ ["t:{先生|せんせい} t:は v:{来|こ}な +g:かった。","The teacher didn't come."]]},
+{t:"Plain copula だ & plain adjectives",f:"n:[Noun / な-adj] g:だ sep:· a:[〜い] x:[no です]",e:"Casual speech: です → だ for nouns & な-adj; い-adj simply drop です.",w:1,tb:{h:["","Polite","Plain","Plain neg.","Plain past","Plain past neg."],r:[["Noun","{雨|あめ}です","{雨|あめ}*だ","{雨|あめ}*じゃない","{雨|あめ}*だった","{雨|あめ}*じゃなかった"],["な-adj","{静|しず}かです","{静|しず}か*だ","{静|しず}か*じゃない","{静|しず}か*だった","{静|しず}か*じゃなかった"],["い-adj","{高|たか}いです","{高|たか}い","{高|たか}*くない","{高|たか}*かった","{高|たか}*くなかった"]]},x:[
+ ["t:{今日|きょう} t:は n:{雨|あめ} g:だ。","It's rainy today."],
+ ["q:この t:{本|ほん} t:は a:{高|たか}い。","This book is expensive. (casual)"],
+ ["t:{私|わたし} t:は n:{先生|せんせい} g:じゃない。","I'm not a teacher."]]},
+{t:"Making the て-form",f:"v:[Verb] sep:→ v:[て-form]",e:"Sound rules by ending. Only one u-verb exception: 行く → 行って.",w:1,tb:{h:["Ending","→","Examples"],r:[["う・つ・る","*って","{買|か}う→{買|か}*って・{待|ま}つ→{待|ま}*って・{帰|かえ}る→{帰|かえ}*って"],["む・ぶ・ぬ","*んで","{飲|の}む→{飲|の}*んで・{遊|あそ}ぶ→{遊|あそ}*んで・{死|し}ぬ→{死|し}*んで"],["く","*いて","{書|か}く→{書|か}*いて"],["ぐ","*いで","{泳|およ}ぐ→{泳|およ}*いで"],["す","*して","{話|はな}す→{話|はな}*して"],["る (ru-verb)","*て","{食|た}べる→{食|た}べ*て・{見|み}る→{見|み}*て"],["exceptions","","{行|い}く→{行|い}*って・する→*して・{来|く}る→{来|き}*て"]]},x:[
+ ["v:{待|ま} +g:って","wait (and…)"],["v:{飲|の} +g:んで","drink (and…)"],["v:{書|か} +g:いて","write (and…)"]]},
+{t:"〜てください — please do",f:"v:[て-form] g:ください",e:"Polite request.",x:[
+ ["o:{水|みず} o:を v:{飲|の}んで g:ください。","Please drink some water."],
+ ["q:ここ p:で v:{待|ま}って g:ください。","Please wait here."],
+ ["n:{日本語|にほんご} p:で v:{話|はな}して g:ください。","Please speak in Japanese."]]},
+{t:"て-form — sequence (and then)",f:"v:[て-form]、 v:[Verb]",e:"Chains actions in order; the last verb sets the tense.",x:[
+ ["x:{七時|しちじ} p:に v:{起|お}き +g:て、 o:{水|みず} o:を v:{飲|の}みます。","I get up at 7 and drink water."],
+ ["n:{家|いえ} p:に v:{帰|かえ} +g:って、 o:{本|ほん} o:を v:{読|よ}みました。","I went home and read a book."]]},
+{t:"〜ている — doing now / ongoing state",f:"v:[て-form] g:いる",e:"Action in progress (-ing), a habit, or a resulting state. Polite: ています.",x:[
+ ["o:{本|ほん} o:を v:{読|よ}んで g:います。","I'm reading a book."],
+ ["n:{駅|えき} p:で o:{友達|ともだち} o:を v:{待|ま}って g:います。","I'm waiting for my friend at the station."],
+ ["t:{猫|ねこ} t:は o:{水|みず} o:を v:{飲|の}んで g:いる。","The cat is drinking water."]]},
+{t:"〜てもいい — may / it's OK to",f:"v:[て-form] g:も g:いい c:です",e:"Permission. Add か to ask “May I…?”",x:[
+ ["q:ここ p:で v:{食|た}べて g:も g:いい c:です p:か。","May I eat here?"],
+ ["x:はい、 v:{食|た}べて g:も g:いい c:です。","Yes, you may (eat)."],
+ ["o:{水|みず} o:を v:{飲|の}んで g:も g:いい c:です。","You may drink the water."]]},
+{t:"〜てはいけない — must not",f:"v:[て-form] g:は g:いけません",e:"Prohibition. Casual: てはいけない / ちゃだめ.",x:[
+ ["q:ここ p:で v:{食|た}べて g:は g:いけません。","You must not eat here."],
+ ["n:{学校|がっこう} p:で n:{猫|ねこ} p:と v:{遊|あそ}んで g:は g:いけない。","You must not play with the cat at school."]]},
+{t:"〜てから — after doing",f:"v:[て-form] g:から、 v:[Verb]",e:"Do A first, then B.",x:[
+ ["o:{水|みず} o:を v:{飲|の}んで g:から、 n:{学校|がっこう} p:に v:{行|い}きます。","After drinking water, I go to school."],
+ ["n:{家|いえ} p:に v:{帰|かえ}って g:から、 o:{本|ほん} o:を v:{読|よ}みました。","After going home, I read a book."]]},
+{t:"Linking adjectives & nouns: 〜くて / 〜で",f:"a:[〜い → 〜く] +g:て sep:· a:[な-adj / Noun] g:で",e:"“…and…” for descriptions: 高い → 高くて, 静か → 静かで, 先生 → 先生で. (いい → よくて)",x:[
+ ["t:{家|いえ} t:は a:{大|おお}き +g:くて a:{静|しず}か c:です。","The house is big and quiet."],
+ ["t:{猫|ねこ} t:は a:きれい g:で a:{小|ちい}さい c:です。","The cat is pretty and small."],
+ ["t:{友達|ともだち} t:は n:{先生|せんせい} g:で、 a:{元気|げんき} c:です。","My friend is a teacher and full of energy."]]},
+{t:"〜ないでください — please don't",f:"v:[ない-form] g:で g:ください",e:"Polite negative request.",x:[
+ ["q:ここ p:で v:{食|た}べない g:で g:ください。","Please don't eat here."],
+ ["v:{待|ま}たない g:で g:ください。","Please don't wait (for me)."]]},
+{t:"〜なければならない — must / have to",f:"v:[ない-form minus い] +g:ければ g:なりません",e:"ない → なければならない (polite: なりません). Casual: 〜なきゃ.",x:[
+ ["n:{明日|あした}、 x:{七時|しちじ} p:に v:{起|お}きな +g:ければ g:なりません。","Tomorrow I have to get up at 7."],
+ ["n:{学校|がっこう} p:に v:{行|い}かな +g:ければ g:ならない。","I have to go to school."]]},
+{t:"〜なくてもいい — don't have to",f:"v:[ない-form minus い] +g:くても g:いい c:です",e:"ない → なくてもいい.",x:[
+ ["n:{明日|あした} t:は v:{来|こ}な +g:くても g:いい c:です。","You don't have to come tomorrow."],
+ ["n:{日本語|にほんご} p:で v:{書|か}かな +g:くても g:いい c:です。","You don't have to write in Japanese."]]},
+{t:"〜たい — want to do",f:"v:[stem] +g:たい c:です",e:"Stem + たい; conjugates as an い-adj (たくない, たかった). Object: を or が.",x:[
+ ["n:{日本|にほん} p:に v:{行|い}き +g:たい c:です。","I want to go to Japan."],
+ ["s:{水|みず} s:が v:{飲|の}み +g:たい c:です。","I want to drink water."],
+ ["o:{本|ほん} o:を v:{読|よ}み +g:たくない c:です。","I don't want to read the book."]]},
+{t:"〜前に / 〜た後で — before / after",f:"v:[Dictionary] g:{前|まえ} g:に sep:· v:[た-form] g:{後|あと} g:で",e:"Before → dictionary form (always, even in the past). After → た-form.",x:[
+ ["n:{学校|がっこう} p:に v:{行|い}く g:{前|まえ} g:に、 o:{水|みず} o:を v:{飲|の}みます。","Before going to school, I drink water."],
+ ["o:{本|ほん} o:を v:{読|よ}んだ g:{後|あと} g:で、 o:{水|みず} o:を v:{飲|の}みました。","After reading the book, I drank water."]]},
+{t:"〜から — because",f:"x:[Reason] g:から、 x:[Result]",e:"Reason + から. Noun / な-adj need だ (or です) before から.",x:[
+ ["n:{雨|あめ} g:だから、 n:{家|いえ} p:で o:{本|ほん} o:を v:{読|よ}みます。","Because it's raining, I'll read at home."],
+ ["a:{高|たか}い g:から、 v:{買|か}いません。","It's expensive, so I won't buy it."]]},
+{t:"〜と思う — I think that…",f:"x:[Plain sentence] g:と g:{思|おも}います",e:"Plain form + と思う. Noun / な-adj keep だ.",x:[
+ ["n:{明日|あした} t:は n:{雨|あめ} c:だ g:と g:{思|おも}います。","I think it'll rain tomorrow."],
+ ["t:{先生|せんせい} t:は v:{来|こ}ない g:と g:{思|おも}う。","I think the teacher won't come."],
+ ["q:この t:{本|ほん} t:は a:{高|たか}い g:と g:{思|おも}います。","I think this book is expensive."]]}
+]},
+{id:"L5",name:"Level 5 · N4",sub:"Plain-form patterns, giving, conditionals, passive",rules:[
+{t:"〜たことがある — have (ever) done",f:"v:[た-form] g:こと g:が g:あります",e:"Life experience. Never done: 〜たことがない.",x:[
+ ["n:{日本|にほん} p:に v:{行|い}った g:こと g:が g:あります。","I have been to Japan."],
+ ["n:{日本|にほん} p:の o:{本|ほん} o:を v:{読|よ}んだ g:こと g:が g:あります p:か。","Have you ever read a Japanese book?"],
+ ["n:{日本語|にほんご} p:で v:{書|か}いた g:こと g:が g:ありません。","I have never written in Japanese."]]},
+{t:"〜たり〜たりする — things like A and B",f:"v:[た-form] +g:り、 v:[た-form] +g:り g:する",e:"Non-exhaustive list of actions; the final する carries the tense.",x:[
+ ["n:{家|いえ} p:で o:{本|ほん} o:を v:{読|よ}んだ +g:り、 o:{水|みず} o:を v:{飲|の}んだ +g:り g:します。","At home I read books, drink water, that sort of thing."],
+ ["n:{昨日|きのう} t:は n:{友達|ともだち} p:と v:{話|はな}した +g:り、 v:{遊|あそ}んだ +g:り g:しました。","Yesterday I talked and played with my friend, among other things."]]},
+{t:"〜たほうがいい — you'd better",f:"v:[た-form] g:ほう g:が g:いい c:です sep:· v:[ない-form] g:ほう g:が g:いい",e:"Advice. Negative advice uses the ない-form (not なかった).",x:[
+ ["o:{水|みず} o:を v:{飲|の}んだ g:ほう g:が g:いい c:です。","You'd better drink some water."],
+ ["n:{明日|あした} t:は v:{行|い}かない g:ほう g:が g:いい c:です。","You'd better not go tomorrow."]]},
+{t:"〜と言う — say / quote",f:"x:[「Quote」 or plain sentence] g:と g:{言|い}いました",e:"Direct quote in 「 」 + と, or plain-form reported speech + と.",x:[
+ ["t:{友達|ともだち} t:は x:「{待|ま}って」 g:と g:{言|い}いました。","My friend said, “Wait.”"],
+ ["t:{先生|せんせい} t:は n:{明日|あした} v:{来|く}る g:と g:{言|い}いました。","The teacher said he'd come tomorrow."],
+ ["q:これ t:は n:{日本語|にほんご} p:で q:{何|なん} g:と g:{言|い}います p:か。","How do you say this in Japanese?"]]},
+{t:"Relative clauses — verb + noun",f:"x:[Plain-form clause] n:[Noun]",e:"A plain-form clause placed before a noun describes it (no “who / which”). Its subject takes が.",x:[
+ ["o:{本|ほん} o:を v:{読|よ}んで v:いる g:{人|ひと} t:は n:{先生|せんせい} c:です。","The person reading a book is a teacher."],
+ ["n:{昨日|きのう} v:{買|か}った g:{本|ほん} t:は a:{高|たか}かった c:です。","The book I bought yesterday was expensive."],
+ ["s:{私|わたし} s:が v:{書|か}いた g:{本|ほん} t:は q:これ c:です。","This is the book I wrote."]]},
+{t:"〜とき — when",f:"x:[Plain clause / Noun + の] g:とき、 x:[Main clause]",e:"Dictionary form = at/before that moment; た-form = after it happened.",x:[
+ ["n:{日本|にほん} p:に v:{行|い}った g:とき、 o:{日本語|にほんご} o:を v:{話|はな}しました。","When I went to Japan, I spoke Japanese."],
+ ["n:{学校|がっこう} p:に v:{行|い}く g:とき、 o:{水|みず} o:を v:{買|か}います。","When I go to school, I buy water (on the way)."],
+ ["n:{雨|あめ} p:の g:とき、 n:{家|いえ} p:で o:{本|ほん} o:を v:{読|よ}みます。","When it rains, I read at home."]]},
+{t:"〜ことができる — can (formal)",f:"v:[Dictionary] g:こと g:が g:できます",e:"Ability / possibility. Same meaning as the potential form, more formal.",x:[
+ ["o:{日本語|にほんご} o:を v:{話|はな}す g:こと g:が g:できます。","I can speak Japanese."],
+ ["q:ここ p:で o:{水|みず} o:を v:{買|か}う g:こと g:が g:できます p:か。","Can I buy water here?"]]},
+{t:"Potential form — can do",f:"v:[Verb] sep:→ v:[〜える / 〜られる]",e:"ru: る→られる · u: -u→-e + る · する→できる · 来る→来られる. Object usually takes が.",tb:{h:["Dictionary","Potential","Polite"],r:[["{食|た}べる","{食|た}べ*られる","{食|た}べ*られます"],["{見|み}る","{見|み}*られる","{見|み}*られます"],["{飲|の}む","{飲|の}*める","{飲|の}*めます"],["{話|はな}す","{話|はな}*せる","{話|はな}*せます"],["{行|い}く","{行|い}*ける","{行|い}*けます"],["{買|か}う","{買|か}*える","{買|か}*えます"],["{待|ま}つ","{待|ま}*てる","{待|ま}*てます"],["する","*できる","*できます"],["{来|く}る","{来|こ}*られる","{来|こ}*られます"]]},x:[
+ ["s:{日本語|にほんご} s:が v:{話|はな} +g:せます。","I can speak Japanese."],
+ ["n:{明日|あした} t:は v:{来|こ} +g:られません。","I can't come tomorrow."],
+ ["q:ここ p:で s:{本|ほん} s:が v:{買|か} +g:えます p:か。","Can I buy books here?"]]},
+{t:"Volitional form — let's (casual) / I'll…",f:"v:[Verb] sep:→ v:[〜おう / 〜よう]",e:"ru: る→よう · u: -u→-o + う · する→しよう · 来る→来よう. + と思う = I'm thinking of…",tb:{h:["Dictionary","Volitional"],r:[["{食|た}べる","{食|た}べ*よう"],["{見|み}る","{見|み}*よう"],["{飲|の}む","{飲|の}*もう"],["{行|い}く","{行|い}*こう"],["{待|ま}つ","{待|ま}*とう"],["{帰|かえ}る","{帰|かえ}*ろう"],["{買|か}う","{買|か}*おう"],["する","*しよう"],["{来|く}る","{来|こ}*よう"]]},x:[
+ ["n:{家|いえ} p:に v:{帰|かえ} +g:ろう。","Let's go home."],
+ ["o:{水|みず} o:を v:{飲|の} +g:もう p:か。","Shall we drink some water?"],
+ ["n:{日本|にほん} p:に v:{行|い} +g:こう g:と g:{思|おも}います。","I'm thinking of going to Japan."]]},
+{t:"〜つもり — intend to",f:"v:[Dictionary / ない-form] g:つもり c:です",e:"Your own intention / plan.",x:[
+ ["n:{明日|あした}、 o:{本|ほん} o:を v:{買|か}う g:つもり c:です。","I intend to buy a book tomorrow."],
+ ["n:{今日|きょう} t:は v:{行|い}かない g:つもり c:です。","I don't intend to go today."]]},
+{t:"〜予定 — scheduled to",f:"v:[Dictionary] g:{予定|よてい} c:です sep:· n:[Noun] p:の g:{予定|よてい}",e:"A fixed schedule (firmer than つもり).",x:[
+ ["n:{明日|あした}、 n:{日本|にほん} p:に v:{行|い}く g:{予定|よてい} c:です。","I'm scheduled to go to Japan tomorrow."],
+ ["t:{先生|せんせい} t:は x:{七時|しちじ} p:に v:{来|く}る g:{予定|よてい} c:です。","The teacher is due to come at 7."]]},
+{t:"なる — become",f:"a:[〜い → 〜く] g:なる sep:· n:[Noun / な-adj] g:に g:なる",e:"い-adj: く + なる. Noun / な-adj: に + なる.",x:[
+ ["t:{本|ほん} t:は a:{高|たか} +g:く g:なりました。","Books have become expensive."],
+ ["t:{猫|ねこ} t:は a:{元気|げんき} g:に g:なりました。","The cat got better."],
+ ["t:{友達|ともだち} t:は n:{先生|せんせい} g:に g:なりました。","My friend became a teacher."]]},
+{t:"あげる — give (to someone else)",f:"t:[Giver] t:は n:[Receiver] p:に o:[Thing] o:を g:あげる",e:"Giving outward: me / my side → others.",x:[
+ ["t:{私|わたし} t:は n:{友達|ともだち} p:に o:{本|ほん} o:を g:あげました。","I gave my friend a book."],
+ ["t:{友達|ともだち} t:は n:{先生|せんせい} p:に o:{水|みず} o:を g:あげました。","My friend gave the teacher some water."]]},
+{t:"くれる — give (to me)",f:"t:[Giver] t:は n:{私|わたし} p:に o:[Thing] o:を g:くれる",e:"Giving inward: someone → me / my side. 私に is often omitted.",x:[
+ ["t:{友達|ともだち} t:は n:{私|わたし} p:に o:{本|ほん} o:を g:くれました。","My friend gave me a book."],
+ ["t:{先生|せんせい} t:は o:{水|みず} o:を g:くれました。","The teacher gave me some water."]]},
+{t:"もらう — receive",f:"t:[Receiver] t:は n:[Giver] p:に/から o:[Thing] o:を g:もらう",e:"Receiver is the topic; the giver takes に or から.",x:[
+ ["t:{私|わたし} t:は n:{友達|ともだち} p:に o:{本|ほん} o:を g:もらいました。","I got a book from my friend."],
+ ["t:{私|わたし} t:は n:{先生|せんせい} p:から o:{水|みず} o:を g:もらいました。","I received water from the teacher."]]},
+{t:"〜てあげる / 〜てくれる / 〜てもらう — favours",f:"v:[て-form] g:あげる sep:/ g:くれる sep:/ g:もらう",e:"Same directions as the giving verbs, but the gift is an action.",x:[
+ ["t:{私|わたし} t:は n:{友達|ともだち} p:に o:{本|ほん} o:を v:{読|よ}んで g:あげました。","I read a book to my friend."],
+ ["t:{友達|ともだち} t:は n:{駅|えき} p:で v:{待|ま}って g:くれました。","My friend waited for me at the station."],
+ ["t:{私|わたし} t:は n:{先生|せんせい} p:に n:{日本語|にほんご} p:で v:{書|か}いて g:もらいました。","I had the teacher write it in Japanese for me."]]},
+{t:"〜てみる — try doing",f:"v:[て-form] g:みる",e:"Do it and see how it goes.",x:[
+ ["n:{日本語|にほんご} p:で v:{書|か}いて g:みます。","I'll try writing in Japanese."],
+ ["q:この o:{水|みず} o:を v:{飲|の}んで g:みて g:ください。","Please try this water."]]},
+{t:"〜てしまう — finish completely / oops",f:"v:[て-form] g:しまう",e:"Done completely, or done with regret. Casual: 〜ちゃう / 〜じゃう.",x:[
+ ["o:{本|ほん} o:を v:{読|よ}んで g:しまいました。","I finished reading the book (all of it)."],
+ ["s:{猫|ねこ} s:が n:{私|わたし} p:の o:{水|みず} o:を v:{飲|の}んで g:しまいました。","The cat drank my water. (oops)"]]},
+{t:"〜ておく — do in advance",f:"v:[て-form] g:おく",e:"Prepare beforehand, or leave as is. Casual: 〜とく.",x:[
+ ["o:{水|みず} o:を v:{買|か}って g:おきます。","I'll buy water in advance."],
+ ["s:{先生|せんせい} s:が v:{来|く}る g:{前|まえ} g:に、 o:{本|ほん} o:を v:{読|よ}んで g:おきます。","I'll read the book before the teacher comes."]]},
+{t:"〜ながら — while doing",f:"v:[stem] +g:ながら、 v:[Main verb]",e:"Same person does two things at once; the last verb is the main action.",x:[
+ ["o:{水|みず} o:を v:{飲|の}み +g:ながら、 o:{本|ほん} o:を v:{読|よ}みます。","I read a book while drinking water."],
+ ["n:{友達|ともだち} p:と v:{話|はな}し +g:ながら、 v:{帰|かえ}りました。","I went home chatting with my friend."]]},
+{t:"〜ので — since, because (soft)",f:"x:[Plain reason] g:ので、 x:[Result]",e:"Softer / more objective than から. Noun & な-adj: なので.",x:[
+ ["n:{雨|あめ} g:なので、 v:{行|い}きません。","Since it's raining, I won't go."],
+ ["a:{高|たか}かった g:ので、 v:{買|か}いませんでした。","It was expensive, so I didn't buy it."]]},
+{t:"〜のに — even though",f:"x:[Plain clause] g:のに、 x:[Unexpected result]",e:"Surprise or frustration at the outcome. Noun & な-adj: なのに.",x:[
+ ["n:{雨|あめ} g:なのに、 t:{友達|ともだち} t:は v:{来|き}ました。","Even though it was raining, my friend came."],
+ ["o:{本|ほん} o:を v:{買|か}った g:のに、 v:{読|よ}みませんでした。","Even though I bought the book, I didn't read it."]]},
+{t:"Conditional 〜と — whenever / if (automatic)",f:"v:[Dictionary] g:と、 x:[Natural result]",e:"B always / naturally follows A. No requests or wishes in B.",x:[
+ ["n:{駅|えき} p:に v:{行|い}く g:と、 s:{学校|がっこう} s:が v:あります。","If you go to the station, there's the school."],
+ ["o:{水|みず} o:を v:{飲|の}む g:と、 a:{元気|げんき} p:に v:なります。","When I drink water, I feel better."]]},
+{t:"Conditional 〜ば — if",f:"v:[-u → -e] +g:ば sep:· a:[〜い → 〜ければ]",e:"u: -u→-e + ば · ru: る→れば · い-adj: い→ければ · noun / な-adj: なら.",tb:{h:["Base","ば form"],r:[["{行|い}く","{行|い}*けば"],["{飲|の}む","{飲|の}*めば"],["{食|た}べる","{食|た}べ*れば"],["する","*すれば"],["{来|く}る","{来|く}*れば"],["{高|たか}い","{高|たか}*ければ"],["いい","*よければ"],["{静|しず}か","{静|しず}か*なら"]]},x:[
+ ["a:{安|やす} +g:ければ、 v:{買|か}います。","If it's cheap, I'll buy it."],
+ ["o:{本|ほん} o:を v:{読|よ} +g:めば、 v:{分|わ}かります。","If you read the book, you'll understand."]]},
+{t:"Conditional 〜たら — if / once",f:"v:[た-form] +g:ら、 x:[Result]",e:"The all-purpose “if / when (after)”. Noun: 〜だったら.",x:[
+ ["n:{家|いえ} p:に v:{帰|かえ}った +g:ら、 o:{水|みず} o:を v:{飲|の}みます。","When I get home, I'll drink water."],
+ ["n:{雨|あめ} g:だったら、 v:{行|い}きません。","If it rains, I won't go."],
+ ["a:{安|やす}かった +g:ら、 v:{買|か}って g:ください。","If it's cheap, please buy it."]]},
+{t:"Conditional 〜なら — if it's the case that",f:"x:[Noun / plain verb] g:なら、 x:[Advice / comment]",e:"Reacts to a topic or plan someone mentioned.",x:[
+ ["n:{猫|ねこ} g:なら、 a:{好|す}き c:です。","If it's cats, I like them."],
+ ["n:{水|みず} g:なら、 n:{駅|えき} p:で v:{買|か}えます。","If it's water (you want), you can buy it at the station."],
+ ["n:{日本|にほん} p:に v:{行|い}く g:なら、 o:{日本語|にほんご} o:を v:{話|はな}した g:ほう g:が g:いい c:です。","If you're going to Japan, you'd better speak Japanese."]]},
+{t:"〜でしょう / 〜かもしれない — probably / maybe",f:"x:[Plain] g:でしょう sep:· x:[Plain] g:かもしれません",e:"でしょう = probably (fairly sure); かもしれない = maybe. Drop だ after nouns & な-adj.",x:[
+ ["n:{明日|あした} t:は n:{雨|あめ} g:でしょう。","It will probably rain tomorrow."],
+ ["t:{先生|せんせい} t:は v:{来|こ}ない g:かもしれません。","The teacher might not come."]]},
+{t:"〜すぎる — too much",f:"v:[stem] +g:すぎる sep:· a:[Adj minus い / な] +g:すぎる",e:"Excess. Conjugates as a ru-verb (すぎます, すぎた…).",x:[
+ ["n:{昨日|きのう} t:は v:{食|た}べ +g:すぎました。","I ate too much yesterday."],
+ ["q:この t:{本|ほん} t:は a:{高|たか} +g:すぎます。","This book is too expensive."],
+ ["t:{家|いえ} t:は a:{静|しず}か +g:すぎる。","The house is too quiet."]]},
+{t:"〜やすい / 〜にくい — easy / hard to do",f:"v:[stem] +g:やすい sep:/ +g:にくい",e:"Conjugates like an い-adjective.",x:[
+ ["q:この t:{本|ほん} t:は v:{読|よ}み +g:やすい c:です。","This book is easy to read."],
+ ["t:{日本語|にほんご} t:は v:{書|か}き +g:にくい c:です。","Japanese is hard to write."]]},
+{t:"〜ことにする — decide to",f:"v:[Dictionary / ない-form] g:こと g:に g:する",e:"Your own decision. ことにした = I've decided.",x:[
+ ["n:{日本|にほん} p:に v:{行|い}く g:こと g:に g:しました。","I decided to go to Japan."],
+ ["n:{今日|きょう} t:は o:{本|ほん} o:を v:{買|か}わない g:こと g:に g:しました。","I decided not to buy a book today."]]},
+{t:"Passive — be done (by)",f:"t:[Affected] t:は n:[Doer] p:に v:[Passive]",e:"ru: る→られる · u: -u→-a + れる (う→われる) · する→される · 来る→来られる. Can mean “was bothered by”.",tb:{h:["Dictionary","Passive"],r:[["{食|た}べる","{食|た}べ*られる"],["{見|み}る","{見|み}*られる"],["{飲|の}む","{飲|の}*まれる"],["{読|よ}む","{読|よ}*まれる"],["{書|か}く","{書|か}*かれる"],["{言|い}う","{言|い}*われる"],["{待|ま}つ","{待|ま}*たれる"],["する","*される"],["{来|く}る","{来|こ}*られる"]]},x:[
+ ["t:{私|わたし} t:は n:{先生|せんせい} p:に v:{見|み} +g:られました。","I was seen by the teacher."],
+ ["q:この t:{本|ほん} t:は n:{日本|にほん} p:で v:{読|よ} +g:まれて v:います。","This book is read in Japan."],
+ ["t:{私|わたし} t:は n:{猫|ねこ} p:に o:{水|みず} o:を v:{飲|の} +g:まれました。","The cat drank my water (and I was annoyed)."]]}
+]},
+{id:"L6",name:"Level 6 · N4–N3",sub:"Causative, nuance & keigo",rules:[
+{t:"Causative — make / let do",f:"t:[Causer] t:は n:[Doer] p:に v:[Causative]",e:"ru: る→させる · u: -u→-a + せる · する→させる · 来る→来させる.",tb:{h:["Dictionary","Causative"],r:[["{食|た}べる","{食|た}べ*させる"],["{飲|の}む","{飲|の}*ませる"],["{読|よ}む","{読|よ}*ませる"],["{行|い}く","{行|い}*かせる"],["{待|ま}つ","{待|ま}*たせる"],["する","*させる"],["{来|く}る","{来|こ}*させる"]]},x:[
+ ["t:{先生|せんせい} t:は n:{私|わたし} p:に o:{本|ほん} o:を v:{読|よ} +g:ませました。","The teacher made me read a book."],
+ ["t:{私|わたし} t:は n:{猫|ねこ} p:に o:{水|みず} o:を v:{飲|の} +g:ませます。","I let the cat drink water."],
+ ["n:{私|わたし} p:に v:{行|い} +g:かせて g:ください。","Please let me go."]]},
+{t:"Causative-passive — be made to do",f:"t:[Person] t:は n:[Causer] p:に v:[Causative-passive]",e:"Causative + られる. u-verbs (except -す) shorten: -aせられる → -aされる.",tb:{h:["Dictionary","Causative-passive","Short form (u-verbs)"],r:[["{食|た}べる","{食|た}べ*させられる","—"],["{飲|の}む","{飲|の}*ませられる","{飲|の}*まされる"],["{読|よ}む","{読|よ}*ませられる","{読|よ}*まされる"],["{待|ま}つ","{待|ま}*たせられる","{待|ま}*たされる"],["{行|い}く","{行|い}*かせられる","{行|い}*かされる"],["{話|はな}す","{話|はな}*させられる","—"],["する","*させられる","—"],["{来|く}る","{来|こ}*させられる","—"]]},x:[
+ ["t:{私|わたし} t:は n:{先生|せんせい} p:に o:{本|ほん} o:を v:{読|よ} +g:まされました。","I was made to read a book by the teacher."],
+ ["n:{駅|えき} p:で n:{友達|ともだち} p:に v:{待|ま} +g:たされました。","My friend kept me waiting at the station."],
+ ["t:{私|わたし} t:は o:{水|みず} o:を v:{飲|の} +g:ませられました。","I was made to drink water."]]},
+{t:"〜そう — looks like (appearance)",f:"a:[Adj minus い / な] +g:そう c:です sep:· v:[stem] +g:そう c:です",e:"Judging by how it looks. いい → よさそう · ない → なさそう.",x:[
+ ["q:この t:{本|ほん} t:は a:{高|たか} +g:そう c:です。","This book looks expensive."],
+ ["t:{猫|ねこ} t:は a:{元気|げんき} +g:そう c:です。","The cat looks lively."],
+ ["q:この t:{水|みず} t:は a:よさ +g:そう c:です。","This water looks good."]]},
+{t:"〜そうだ — I hear that (hearsay)",f:"x:[Plain sentence] g:そう c:です",e:"Full plain form + そうです (noun / な-adj + だそうです). Compare 高そう vs 高いそう.",x:[
+ ["n:{明日|あした} t:は n:{雨|あめ} g:だそう c:です。","I hear it'll rain tomorrow."],
+ ["t:{先生|せんせい} t:は v:{来|こ}ない g:そう c:です。","I hear the teacher isn't coming."],
+ ["q:あの t:{本|ほん} t:は a:{高|たか}い g:そう c:です。","I hear that book is expensive."]]},
+{t:"〜ようだ / 〜みたい — it seems / like",f:"x:[Plain] g:よう c:です sep:· x:[Plain] g:みたい c:です",e:"Your inference from evidence. みたい is casual. Noun + のよう / Noun + みたい = like a…",x:[
+ ["t:{先生|せんせい} t:は v:{来|こ}ない g:よう c:です。","It seems the teacher isn't coming."],
+ ["n:{雨|あめ} g:みたい c:です。","It looks like rain."],
+ ["t:{友達|ともだち} t:は n:{猫|ねこ} g:みたい c:です。","My friend is like a cat."]]},
+{t:"〜らしい — apparently",f:"x:[Plain] g:らしい c:です",e:"Based on what you heard or read (less direct than そうだ).",x:[
+ ["n:{明日|あした} t:は n:{雨|あめ} g:らしい c:です。","Apparently it'll rain tomorrow."],
+ ["t:{先生|せんせい} t:は n:{日本|にほん} p:に v:{帰|かえ}った g:らしい c:です。","Apparently the teacher went back to Japan."]]},
+{t:"〜はず — should be (expected)",f:"x:[Plain] g:はず c:です",e:"Logical expectation. Noun + のはず · な-adj + なはず.",x:[
+ ["t:{先生|せんせい} t:は x:{七時|しちじ} p:に v:{来|く}る g:はず c:です。","The teacher should come at 7."],
+ ["t:{友達|ともだち} t:は n:{家|いえ} p:に v:いる g:はず c:です。","My friend should be at home."]]},
+{t:"〜ようになる — come to (change)",f:"v:[Dictionary / Potential] g:よう g:に g:なる",e:"Gradual change in ability or habit.",x:[
+ ["s:{日本語|にほんご} s:が v:{話|はな}せる g:よう g:に g:なりました。","I've become able to speak Japanese."],
+ ["t:{猫|ねこ} t:は o:{水|みず} o:を v:{飲|の}む g:よう g:に g:なりました。","The cat has started drinking water."]]},
+{t:"〜ようにする — make sure to / try to",f:"v:[Dictionary / ない-form] g:よう g:に g:する",e:"Conscious effort or habit. ようにしている = I make a point of…",x:[
+ ["x:{七時|しちじ} p:に v:{起|お}きる g:よう g:に g:して g:います。","I make a point of getting up at 7."],
+ ["o:{水|みず} o:を v:{飲|の}む g:よう g:に g:します。","I'll try to drink water."]]},
+{t:"〜ば〜ほど — the more…, the more…",f:"v:[ば-form] v:[Dictionary] g:ほど",e:"Same word twice: ば-form, then plain form + ほど.",x:[
+ ["o:{本|ほん} o:を v:{読|よ}め +g:ば v:{読|よ}む g:ほど、 v:{分|わ}かります。","The more you read, the more you understand."],
+ ["t:{家|いえ} t:は a:{大|おお}きけれ +g:ば a:{大|おお}きい g:ほど a:いい c:です。","The bigger the house, the better."]]},
+{t:"〜てほしい — want someone to do",f:"n:[Person] p:に v:[て-form] g:ほしい",e:"Your wish about another person's action.",x:[
+ ["n:{友達|ともだち} p:に v:{来|き}て g:ほしい c:です。","I want my friend to come."],
+ ["n:{先生|せんせい} p:に n:{日本語|にほんご} p:で v:{話|はな}して g:ほしい c:です。","I want the teacher to speak in Japanese."]]},
+{t:"〜ために — in order to / for",f:"v:[Dictionary] g:ために sep:· n:[Noun] p:の g:ために",e:"Purpose (with a deliberate action) or benefit.",x:[
+ ["o:{日本語|にほんご} o:を v:{話|はな}す g:ために、 n:{日本|にほん} p:に v:{行|い}きます。","I'm going to Japan in order to speak Japanese."],
+ ["n:{猫|ねこ} p:の g:ために、 o:{水|みず} o:を v:{買|か}いました。","I bought water for the cat."]]},
+{t:"Keigo ① Honorific — raise the other person",f:"t:[Superior] t:は g:お v:[stem] g:に g:なります",e:"For a superior's actions: special verbs, or お + stem + になる.",tb:{h:["Plain","Honorific (尊敬語)"],r:[["{行|い}く・{来|く}る・いる","*いらっしゃる"],["{食|た}べる・{飲|の}む","*{召|め}し{上|あ}がる"],["{言|い}う","*おっしゃる"],["する","*なさる"],["{見|み}る","*ご{覧|らん}になる"],["{帰|かえ}る","*お{帰|かえ}りになる"]]},x:[
+ ["t:{先生|せんせい} t:は n:{明日|あした} g:いらっしゃいます。","The teacher will come tomorrow."],
+ ["t:{先生|せんせい} t:は o:{水|みず} o:を g:{召|め}し{上|あ}がりました。","The teacher drank the water."],
+ ["t:{先生|せんせい} t:は g:お +v:{帰|かえ}り g:に g:なりました。","The teacher has gone home."]]},
+{t:"Keigo ② Humble — lower yourself",f:"t:{私|わたし} t:は g:お v:[stem] g:します",e:"For your own actions toward a superior: special verbs, or お + stem + する.",tb:{h:["Plain","Humble (謙譲語)"],r:[["{行|い}く・{来|く}る","*{参|まい}る"],["いる","*おる"],["{食|た}べる・{飲|の}む・もらう","*いただく"],["{言|い}う","*{申|もう}す"],["する","*いたす"],["{見|み}る","*{拝見|はいけん}する"]]},x:[
+ ["n:{明日|あした}、 n:{学校|がっこう} p:に g:{参|まい}ります。","I will go to the school tomorrow."],
+ ["n:{駅|えき} p:で g:お +v:{待|ま}ち g:します。","I will wait for you at the station."],
+ ["o:{水|みず} o:を g:いただきます。","I'll have some water."]]}
+]}
+];
+
+/* ===== kana → romaji (simple Hepburn, wāpuro long vowels) ===== */
+const K1={"あ":"a","い":"i","う":"u","え":"e","お":"o","か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko","が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go",
+"さ":"sa","し":"shi","す":"su","せ":"se","そ":"so","ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo","た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to",
+"だ":"da","ぢ":"ji","づ":"zu","で":"de","ど":"do","な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no","は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho",
+"ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo","ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po","ま":"ma","み":"mi","む":"mu","め":"me","も":"mo",
+"や":"ya","ゆ":"yu","よ":"yo","ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro","わ":"wa","を":"o","ん":"n","ぁ":"a","ぃ":"i","ぅ":"u","ぇ":"e","ぉ":"o",
+"ゔ":"vu","、":", ","。":".","？":"?","！":"!","「":"“","」":"”","・":" / ","→":" → ","ー":"-","〜":"~"};
+const SMALLY={"ゃ":"a","ゅ":"u","ょ":"o"};
+function toHira(s){return s.replace(/[\u30a1-\u30f6]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60));}
+function romaji(src){
+  const s=toHira(src);let out="",i=0;
+  while(i<s.length){
+    const c=s[i],n=s[i+1];
+    if(c==="っ"){const nx=romaji(s.slice(i+1,i+3));const m=nx.match(/^[bcdfghjkmprstwz]/);out+=m?(m[0]==="c"?"t":m[0]):"";i++;continue;}
+    if(c==="ん"){const nx=K1[n]||"";out+=/^[aiueoy]/.test(nx)?"n'":"n";i++;continue;}
+    if(c==="ー"&&S.last){out+=S.last;i++;continue;}
+    let r=K1[c];
+    if(r===undefined){out+=c;i++;continue;}
+    if(n&&SMALLY[n]&&r.endsWith("i")&&r.length>1){r=/^(shi|chi|ji)$/.test(r)?r.slice(0,-1)+SMALLY[n]:r.slice(0,-1)+"y"+SMALLY[n];i++;}
+    out+=r;i++;
+  }
+  return out;
+}
+const S={last:""};
+const PMAP={"は":"wa","へ":"e","には":"ni wa","では":"de wa","とは":"to wa","へは":"e wa"};
+
+/* ===== markup parser ===== */
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function parse(text,allowHl){
+  let html="",kana="",hl=false;
+  const re=/\{([^|}]+)\|([^}]+)\}|\[([^\]]+)\]|(\*)|([^{[*]+)/g;let m;
+  const open=()=>{html+='<span class="hl">';hl=true;},close=()=>{if(hl){html+="</span>";hl=false;}};
+  while((m=re.exec(text))){
+    if(m[1]){html+=`<ruby>${esc(m[1])}<rt>${esc(m[2])}</rt></ruby>`;kana+=m[2];}
+    else if(m[3]){html+=`<span class="slot">${esc(m[3])}</span>`;}
+    else if(m[4]){if(!allowHl)continue;hl?close():open();}
+    else{
+      if(allowHl&&hl){ // auto-close highlight at separators
+        for(const ch of m[5]){if(ch==="・"||ch==="→"){close();html+=esc(ch);}else html+=esc(ch);}
+      } else html+=esc(m[5]);
+      kana+=m[5];
+    }
+  }
+  close();
+  return {html,kana};
+}
+function tokens(str){return str.trim().split(/\s+(?![^\[]*\])/).filter(Boolean).map(tok=>{
+  let glue=false;if(tok[0]==="+"){glue=true;tok=tok.slice(1);}
+  const m=tok.match(/^([a-z]+):([\s\S]*)$/);
+  return {glue,k:m?m[1]:"x",txt:m?m[2]:tok};
+});}
+function tokRomaji(t,kana){
+  const bare=kana.replace(/[、。？！]/g,""),tail=kana.slice(bare.length);
+  let r;
+  if(PMAP[bare]&&!/^[van]$/.test(t.k)) r=PMAP[bare]+romaji(tail);
+  else r=romaji(kana);
+  return r.replace(/^ja(ari|na)/,"ja $1").replace(/masendeshita/,"masen deshita");
+}
+function fixWords(r){return r.replace(/\bnihon/g,"Nihon");}
+function cellRomaji(kana){
+  return romaji(kana).replace(/\s+/g," ").trim()
+    .replace(/(\S)?ja(ari|na)/g,(m,a,b)=>(a?a+" ":"")+"ja "+b)
+    .replace(/masendeshita/g,"masen deshita")
+    .replace(/(\S)(desu|deshita)\b/g,"$1 $2")
+    .replace(/(\S)ninaru\b/g,"$1 ni naru")
+    .replace(/([^ni\s])(da|datta)$/,"$1 $2");
+}
+function renderExample(str){
+  let jp="",ro=[];
+  for(const t of tokens(str)){
+    if(t.k==="sep"){jp+=`<span class="sep">${esc(t.txt)}</span>`;ro.push({g:false,r:t.txt});continue;}
+    const p=parse(t.txt,false);
+    jp+=`<span class="w k-${t.k}">${p.html}</span>`;
+    const r=tokRomaji(t,p.kana);
+    if(t.glue&&ro.length)ro[ro.length-1].r+=r;else ro.push({r});
+  }
+  let rs=ro.map(o=>o.r).join(" ").replace(/\s+([,.?!”])/g,"$1").replace(/“\s+/g,"“").replace(/\s{2,}/g," ").trim();
+  rs=fixWords(rs);rs=rs.charAt(0).toUpperCase()+rs.slice(1);
+  rs=rs.replace(/([.?!]”?\s+)([a-z])/g,(m,a,b)=>a+b.toUpperCase());
+  return {jp,ro:rs};
+}
+function renderFormula(str){
+  return tokens(str).map(t=>{
+    if(t.k==="sep")return `<span class="sep">${esc(t.txt)}</span>`;
+    return `<span class="chip k-${t.k}">${parse(t.txt,false).html}</span>`;
+  }).join("");
+}
+function renderCell(txt,isHead){
+  const p=parse(txt,true);
+  const hasKana=/[\u3040-\u30ff]/.test(p.kana);
+  const r=(!isHead&&hasKana)?`<span class="cr">${esc(fixWords(cellRomaji(p.kana)))}</span>`:"";
+  return p.html+r;
+}
+
+/* ===== build page ===== */
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+let learned=new Set(store.get("jg.learned",[]));
+
+function build(){
+  document.getElementById("legend").innerHTML=LEGEND.map(([k,l])=>`<span class="k-${k}"${k==="g"?' style="background:var(--hl);color:var(--hl-ink);border-color:transparent"':""}>${esc(l)}</span>`).join("");
+  document.getElementById("vgrid").innerHTML=VOCAB.map(([g,items])=>`<div class="vgroup">${esc(g)}</div>`+items.map(([w,en])=>{
+    const p=parse(w,false);return `<div class="vitem"><span class="jp">${p.html}</span><span><span class="en">${esc(en)}</span><br><span class="kn">${esc(p.kana)} · <span class="ro" style="font-size:12px">${esc(romaji(p.kana))}</span></span></span></div>`;}).join("")).join("");
+  let n=0,toc="",out="";
+  for(const L of LEVELS){
+    toc+=`<div class="lvl" data-l="${L.id}"><a href="#${L.id}">${esc(L.name)} <small>${esc(L.sub)}</small></a><div class="bar"><i></i></div><ol>`;
+    out+=`<section class="level" id="${L.id}"><div class="level-h"><h2>${esc(L.name)}</h2><span class="sub">${esc(L.sub)}</span><span class="prog"><span class="pt"></span><span class="bar"><i></i></span></span></div><div class="cards">`;
+    for(const R of L.rules){
+      n++;const id="r"+n;R.id=id;
+      toc+=`<li data-id="${id}"><a href="#${id}"><b>${n}</b><span>${esc(R.t)}</span></a></li>`;
+      const wide=R.w||(R.tb&&R.tb.h.length>=5);
+      let tb="";
+      if(R.tb){tb=`<div class="tw"><table class="conj"><thead><tr>${R.tb.h.map(h=>`<th>${renderCell(h,true)}</th>`).join("")}</tr></thead><tbody>${R.tb.r.map(row=>`<tr>${row.map(c=>`<td>${renderCell(c,false)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;}
+      const ex=R.x.map(([j,en])=>{const r=renderExample(j);return `<li><div class="jp">${r.jp}</div><div class="ro">${esc(r.ro)}</div><div class="en">${esc(en)}</div></li>`;}).join("");
+      out+=`<article class="card${wide?" wide":""}" id="${id}" data-l="${L.id}"><div class="card-h"><span class="num">${n}</span><h3>${esc(R.t)}</h3><label class="learn"><input type="checkbox" data-id="${id}">learned</label></div>`+
+        `<div class="formula">${renderFormula(R.f)}</div><p class="expl">${esc(R.e)}</p>${tb}<ul class="ex">${ex}</ul></article>`;
+    }
+    toc+=`</ol></div>`;out+=`</div></section>`;
+  }
+  document.getElementById("toc").innerHTML=toc;
+  document.getElementById("levels").innerHTML=out;
+  document.querySelectorAll(".learn input").forEach(cb=>{cb.checked=learned.has(cb.dataset.id);cb.addEventListener("change",()=>{cb.checked?learned.add(cb.dataset.id):learned.delete(cb.dataset.id);store.set("jg.learned",[...learned]);refresh();});});
+  document.querySelectorAll("ul.ex li").forEach(li=>li.addEventListener("click",()=>li.classList.toggle("reveal")));
+  document.querySelectorAll("table.conj tr").forEach(tr=>tr.addEventListener("click",()=>tr.classList.toggle("reveal")));
+  refresh();
+}
+function refresh(){
+  let all=0,done=0;
+  for(const L of LEVELS){
+    const tot=L.rules.length,d=L.rules.filter(r=>learned.has(r.id)).length;all+=tot;done+=d;
+    const pct=Math.round(d/tot*100)+"%";
+    document.querySelector(`#toc .lvl[data-l="${L.id}"] .bar i`).style.width=pct;
+    const sec=document.getElementById(L.id);sec.querySelector(".prog .bar i").style.width=pct;sec.querySelector(".pt").textContent=`${d}/${tot} learned`;
+  }
+  document.querySelectorAll("#toc li").forEach(li=>li.classList.toggle("done",learned.has(li.dataset.id)));
+  document.querySelectorAll(".card").forEach(c=>c.classList.toggle("learned",learned.has(c.id)));
+  document.getElementById("overallTxt").textContent=`${done}/${all} learned`;
+  document.getElementById("overallBar").style.width=(all?done/all*100:0)+"%";
+}
+function setupControls(){
+  const prefs=store.get("jg.prefs",{furi:true,ro:true,en:true,hideLearned:false});
+  const apply=()=>{document.body.classList.toggle("no-furi",!prefs.furi);document.body.classList.toggle("no-ro",!prefs.ro);document.body.classList.toggle("no-en",!prefs.en);document.body.classList.toggle("hide-learned",!!prefs.hideLearned);
+    document.querySelectorAll("[data-tg]").forEach(b=>b.setAttribute("aria-pressed",String(!!prefs[b.dataset.tg])));
+    document.getElementById("hideLearned").setAttribute("aria-pressed",String(!!prefs.hideLearned));store.set("jg.prefs",prefs);};
+  document.querySelectorAll("[data-tg]").forEach(b=>b.addEventListener("click",()=>{prefs[b.dataset.tg]=!prefs[b.dataset.tg];apply();}));
+  document.getElementById("hideLearned").addEventListener("click",()=>{prefs.hideLearned=!prefs.hideLearned;apply();});
+  apply();
+  const theme=store.get("jg.theme",null)||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+  document.documentElement.classList.toggle("dark",theme==="dark");
+  document.getElementById("themeBtn").addEventListener("click",()=>{const d=document.documentElement.classList.toggle("dark");store.set("jg.theme",d?"dark":"light");});
+  document.getElementById("menuBtn").addEventListener("click",()=>document.body.classList.toggle("toc-open"));
+  document.getElementById("toc").addEventListener("click",e=>{if(e.target.closest("a"))document.body.classList.remove("toc-open");});
+}
+build();setupControls();
+</script>
+</body>
+</html>
