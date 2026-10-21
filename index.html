@@ -911,12 +911,15 @@ function initToc(prefs,setMenu){
     else markCurrent(null);
     persist();
   });
-  let ticking=false;
+  let ticking=false,scrollTimer=0;
   window.addEventListener("scroll",()=>{
-    if(ticking) return;
-    ticking=true;
-    requestAnimationFrame(()=>{
-      ticking=false;
+    if(!ticking){
+      ticking=true;
+      requestAnimationFrame(()=>{ticking=false;markCurrent(activeLevelId());});
+    }
+    // Wait until scrolling settles so a long jump does not unfold every level it passes.
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(()=>{
       const id=activeLevelId();
       markCurrent(id);
       if(id===last) return;
@@ -926,7 +929,7 @@ function initToc(prefs,setMenu){
       if(!held) suppress=null;
       last=id;
       if(id&&!held){openPath(id);persist();}
-    });
+    },160);
   },{passive:true});
   window.addEventListener("hashchange",()=>{
     const id=levelFromHash()||activeLevelId();
