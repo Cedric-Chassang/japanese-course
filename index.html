@@ -161,13 +161,17 @@ footer{color:var(--muted);font-size:12.5px;text-align:center;margin-top:40px}
 .speech-note{position:fixed;z-index:60;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:min(92vw,440px);padding:8px 12px;border-radius:10px;background:var(--ink);color:var(--bg);font-size:13px;line-height:1.4;text-align:center;box-shadow:var(--shadow);pointer-events:none}
 .speech-note[hidden]{display:none}
 @media (max-width:900px){
-  .layout{grid-template-columns:1fr}
-  #menuBtn{display:inline-block}
+  .layout{grid-template-columns:1fr;overflow-x:clip}
+  /* Drawer is z-index 40. Keep the bar (and its toggle) above it so the control stays clickable when the panel is open. */
+  .topbar{z-index:50}
+  #menuBtn{display:inline-block;position:relative;z-index:1;flex:none}
+  .topbar .tbtn{flex:none}
   aside#toc{position:fixed;top:var(--top-h,54px);left:0;bottom:0;width:min(290px,88vw);max-height:none;background:var(--panel);z-index:40;padding:12px 14px 24px;
     border-right:1px solid var(--line);transform:translateX(-105%);transition:transform .25s;overscroll-behavior:contain}
   body.toc-open aside#toc{transform:none;box-shadow:0 0 40px rgba(0,0,0,.25)}
+  body.toc-open::before{content:"";position:fixed;z-index:35;top:var(--top-h,54px);left:0;right:0;bottom:0;background:rgba(0,0,0,.28)}
   .cards{grid-template-columns:1fr}
-  .topbar h1{font-size:15px}
+  .topbar h1{font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis}
   .overall .bar{display:none}
 }
 @media (max-width:480px){ .jp{font-size:18px} .formula{font-size:15px} .card{padding:12px} .speak{width:32px;height:32px} }
@@ -785,8 +789,15 @@ function setupControls(){
   document.documentElement.classList.toggle("dark",theme==="dark");
   document.getElementById("themeBtn").addEventListener("click",()=>{const d=document.documentElement.classList.toggle("dark");store.set("jg.theme",d?"dark":"light");});
   const menuBtn=document.getElementById("menuBtn");
-  const setMenu=open=>{document.body.classList.toggle("toc-open",open);menuBtn.setAttribute("aria-expanded",String(open));menuBtn.setAttribute("aria-label",open?"Close contents":"Contents");menuBtn.textContent=open?"✕":"☰";};
+  const syncTop=()=>document.documentElement.style.setProperty("--top-h",document.querySelector(".topbar").offsetHeight+"px");
+  const setMenu=open=>{document.body.classList.toggle("toc-open",open);menuBtn.setAttribute("aria-expanded",String(open));menuBtn.setAttribute("aria-label",open?"Close contents":"Contents");menuBtn.textContent=open?"✕":"☰";syncTop();};
   menuBtn.addEventListener("click",()=>setMenu(!document.body.classList.contains("toc-open")));
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&document.body.classList.contains("toc-open")) setMenu(false);});
+  document.addEventListener("click",e=>{
+    if(!document.body.classList.contains("toc-open")||window.matchMedia("(min-width:901px)").matches) return;
+    if(e.target.closest("#menuBtn,#toc,.topbar")) return;
+    setMenu(false);
+  });
   initToc(prefs,setMenu);
   document.getElementById("toc").addEventListener("click",e=>{
     const a=e.target.closest("a");
@@ -942,6 +953,7 @@ function initToc(prefs,setMenu){
   const syncBar=()=>document.documentElement.style.setProperty("--top-h",document.querySelector(".topbar").offsetHeight+"px");
   syncBar();
   window.addEventListener("resize",syncBar);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(syncBar);
 }
 /* ===== Japanese playback (Web Speech API) =====
    speak() is called synchronously inside the click handler so iOS Safari/Chrome
