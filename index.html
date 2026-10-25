@@ -161,7 +161,7 @@ footer{color:var(--muted);font-size:12.5px;text-align:center;margin-top:40px}
 .speech-note{position:fixed;z-index:60;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:min(92vw,440px);padding:8px 12px;border-radius:10px;background:var(--ink);color:var(--bg);font-size:13px;line-height:1.4;text-align:center;box-shadow:var(--shadow);pointer-events:none}
 .speech-note[hidden]{display:none}
 @media (max-width:900px){
-  .layout{grid-template-columns:1fr}
+  .layout{grid-template-columns:1fr;overflow-x:clip}
   /* Drawer is z-index 40. Keep the bar (and its toggle) above it so the control stays clickable when the panel is open. */
   .topbar{z-index:50}
   #menuBtn{display:inline-block;position:relative;z-index:1;flex:none}
